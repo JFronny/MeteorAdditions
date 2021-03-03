@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "meteor-additions",
+  "version": "${version}",
+  "name": "MeteorAdditions",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/MeteorAdditions/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "meteor": [
+      "io.gitlab.jfronny.meteoradditions.MeteorAdditions"
+    ]
+  },
+  "mixins": [
+    "MeteorAdditions.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.2",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}
