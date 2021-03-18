@@ -4,16 +4,15 @@ import io.gitlab.jfronny.meteoradditions.modules.*;
 import minegame159.meteorclient.MeteorAddon;
 import minegame159.meteorclient.modules.Category;
 import minegame159.meteorclient.modules.Modules;
+import net.minecraft.item.Items;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class MeteorAdditions extends MeteorAddon {
     public static final Logger LOG = LogManager.getLogger();
-    public static final Category creative = new Category("Creative");
+    public static final Category category = new Category("Motor-", Items.BEDROCK.getDefaultStack());
     @Override
     public void onInitialize() {
-        //TODO remove tracking from meteor
-        //TODO add randomTeleport to KillAura
         Modules reg = Modules.get();
         reg.add(new KillPotion());
         reg.add(new TrollPotion());
@@ -24,6 +23,6 @@ public class MeteorAdditions extends MeteorAddon {
 
     @Override
     public void onRegisterCategories() {
-        Modules.registerCategory(creative);
+        Modules.registerCategory(category);
     }
 }

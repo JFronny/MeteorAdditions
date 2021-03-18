@@ -3,7 +3,6 @@ package io.gitlab.jfronny.meteoradditions.modules;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import meteordevelopment.orbit.EventHandler;
 import minegame159.meteorclient.events.world.TickEvent;
-import minegame159.meteorclient.modules.Category;
 import minegame159.meteorclient.modules.Module;
 import minegame159.meteorclient.settings.IntSetting;
 import minegame159.meteorclient.settings.Setting;
@@ -42,7 +41,7 @@ public class SpawnItems extends Module {
     private final Random random = new Random();
 
     public SpawnItems() {
-        super(MeteorAdditions.creative, "spawn-items", "Spawns a lot of unwanted items");
+        super(MeteorAdditions.category, "spawn-items", "Spawns a lot of unwanted items");
     }
 
     @Override

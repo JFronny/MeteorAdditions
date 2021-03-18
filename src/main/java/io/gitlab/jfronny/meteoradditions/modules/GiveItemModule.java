@@ -8,7 +8,7 @@ import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 
 public abstract class GiveItemModule extends Module {
     public GiveItemModule(String name, String description) {
-        super(MeteorAdditions.creative, name, description);
+        super(MeteorAdditions.category, name, description);
     }
 
     @Override
