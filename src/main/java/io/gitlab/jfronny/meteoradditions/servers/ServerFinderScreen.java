@@ -1,8 +1,13 @@
 package io.gitlab.jfronny.meteoradditions.servers;
 
 import io.gitlab.jfronny.meteoradditions.IMultiplayerScreen;
-import minegame159.meteorclient.gui.screens.WindowScreen;
-import minegame159.meteorclient.gui.widgets.*;
+import minegame159.meteorclient.gui.GuiTheme;
+import minegame159.meteorclient.gui.WindowScreen;
+import minegame159.meteorclient.gui.widgets.pressable.WButton;
+import minegame159.meteorclient.gui.widgets.input.WTextBox;
+import minegame159.meteorclient.gui.widgets.input.WIntEdit;
+import minegame159.meteorclient.gui.widgets.containers.WTable;
+import minegame159.meteorclient.gui.widgets.WLabel;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.network.ServerInfo;
 
@@ -15,7 +20,7 @@ public class ServerFinderScreen extends WindowScreen {
     private ServerFinderState state;
 
     private final WTextBox ipBox;
-    private final WIntTextBox maxThreadsBox;
+    private final WIntEdit maxThreadsBox;
     private final WButton searchButton;
     private final WLabel stateLabel;
     private final WLabel checkedLabel;
@@ -25,29 +30,30 @@ public class ServerFinderScreen extends WindowScreen {
     private int checked;
     private int working;
 
-    public ServerFinderScreen(MultiplayerScreen multiplayerScreen) {
-        super("Server Discovery", true);
+    public ServerFinderScreen(GuiTheme theme, MultiplayerScreen multiplayerScreen) {
+        super(theme, "Server Discovery");
         this.multiplayerScreen = multiplayerScreen;
-        WTable table = add(new WTable()).getWidget();
-        table.add(new WLabel("This will search for servers with similar IPs"));
+        this.parent = multiplayerScreen;
+        WTable table = add(new WTable()).widget();
+        table.add(theme.label("This will search for servers with similar IPs"));
         table.row();
-        table.add(new WLabel("to the IP you type into the field below."));
+        table.add(theme.label("to the IP you type into the field below."));
         table.row();
-        table.add(new WLabel("The servers it finds will be added to your server list."));
+        table.add(theme.label("The servers it finds will be added to your server list."));
         table.row();
-        table.add(new WLabel("Server address:"));
-        ipBox = table.add(new WTextBox("127.0.0.1", 200)).fillX().expandX().getWidget();
+        table.add(theme.label("Server address:"));
+        ipBox = table.add(theme.textBox("127.0.0.1")).expandX().widget();
         table.row();
-        table.add(new WLabel("Max. Threads:"));
-        maxThreadsBox = table.add(new WIntTextBox(128, 200)).getWidget();
+        table.add(theme.label("Max. Threads:"));
+        maxThreadsBox = table.add(theme.intEdit(128, 1, 256)).widget();
         table.row();
-        stateLabel = table.add(new WLabel("")).getWidget();
+        stateLabel = table.add(theme.label("")).widget();
         table.row();
-        checkedLabel = table.add(new WLabel("")).getWidget();
+        checkedLabel = table.add(theme.label("")).widget();
         table.row();
-        workingLabel = table.add(new WLabel("")).getWidget();
+        workingLabel = table.add(theme.label("")).widget();
         table.row();
-        searchButton = table.add(new WButton("Search")).fillX().expandX().getWidget();
+        searchButton = table.add(theme.button("Search")).expandX().widget();
         searchButton.action = this::searchOrCancel;
         state = ServerFinderState.NOT_RUNNING;
     }
@@ -60,7 +66,7 @@ public class ServerFinderScreen extends WindowScreen {
         }
 
         state = ServerFinderState.RESOLVING;
-        maxThreads = maxThreadsBox.getValue();
+        maxThreads = maxThreadsBox.get();
         checked = 0;
         working = 0;
 
@@ -72,7 +78,7 @@ public class ServerFinderScreen extends WindowScreen {
         try
         {
             InetAddress addr =
-                    InetAddress.getByName(ipBox.getText().split(":")[0].trim());
+                    InetAddress.getByName(ipBox.get().split(":")[0].trim());
 
             int[] ipParts = new int[4];
             for(int i = 0; i < 4; i++)
@@ -125,15 +131,15 @@ public class ServerFinderScreen extends WindowScreen {
     @Override
     public void tick()
     {
-        searchButton.setText(state.isRunning() ? "Cancel" : "Search");
+        searchButton.set(state.isRunning() ? "Cancel" : "Search");
         if (state.isRunning()) {
             ipBox.setFocused(false);
-            maxThreadsBox.setFocused(false);
+            maxThreadsBox.set(128);
         }
-        stateLabel.setText(state.toString());
-        checkedLabel.setText("Checked: " + checked + " / 1792");
-        workingLabel.setText("Working: " + working);
-        searchButton.visible = !ipBox.getText().isEmpty();
+        stateLabel.set(state.toString());
+        checkedLabel.set("Checked: " + checked + " / 1792");
+        workingLabel.set("Working: " + working);
+        searchButton.visible = !ipBox.get().isEmpty();
     }
 
     private boolean isServerInList(String ip)

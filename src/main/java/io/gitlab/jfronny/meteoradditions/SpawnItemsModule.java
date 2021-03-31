@@ -1,8 +1,9 @@
-package io.gitlab.jfronny.meteoradditions.modules;
+package io.gitlab.jfronny.meteoradditions;
 
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import meteordevelopment.orbit.EventHandler;
 import minegame159.meteorclient.events.world.TickEvent;
+import minegame159.meteorclient.modules.Categories;
 import minegame159.meteorclient.modules.Module;
 import minegame159.meteorclient.settings.IntSetting;
 import minegame159.meteorclient.settings.Setting;
@@ -16,7 +17,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Random;
 
-public class SpawnItems extends Module {
+public class SpawnItemsModule extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final Setting<Integer> speed = sgGeneral.add(new IntSetting.Builder()
             .name("speed")
@@ -40,8 +41,8 @@ public class SpawnItems extends Module {
 
     private final Random random = new Random();
 
-    public SpawnItems() {
-        super(MeteorAdditions.category, "spawn-items", "Spawns a lot of unwanted items");
+    public SpawnItemsModule() {
+        super(Categories.Misc, "spawn-items", "Spawns a lot of unwanted items");
     }
 
     @Override

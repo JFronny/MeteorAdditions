@@ -1,11 +1,10 @@
 package io.gitlab.jfronny.meteoradditions.servers;
 
 import io.gitlab.jfronny.meteoradditions.IMultiplayerScreen;
-import minegame159.meteorclient.gui.screens.WindowScreen;
-import minegame159.meteorclient.gui.widgets.WButton;
-import minegame159.meteorclient.gui.widgets.WCheckbox;
-import minegame159.meteorclient.gui.widgets.WLabel;
-import minegame159.meteorclient.gui.widgets.WTable;
+import minegame159.meteorclient.gui.GuiTheme;
+import minegame159.meteorclient.gui.WindowScreen;
+import minegame159.meteorclient.gui.widgets.pressable.WCheckbox;
+import minegame159.meteorclient.gui.widgets.containers.WTable;
 import minegame159.meteorclient.utils.render.color.Color;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -21,31 +20,32 @@ public class CleanUpScreen extends WindowScreen {
     private final WCheckbox removeGriefMe;
     private final WCheckbox rename;
 
-    public CleanUpScreen(MultiplayerScreen multiplayerScreen) {
-        super("Clean Up", true);
+    public CleanUpScreen(GuiTheme theme, MultiplayerScreen multiplayerScreen) {
+        super(theme, "Clean Up");
         this.multiplayerScreen = multiplayerScreen;
-        WTable table = add(new WTable()).getWidget();
-        table.add(new WLabel("Remove:"));
+        this.parent = multiplayerScreen;
+        WTable table = add(new WTable()).widget();
+        table.add(theme.label("Remove:"));
         table.row();
-        table.add(new WLabel("Unknown Hosts:")).getWidget().tooltip = "";
-        removeUnknown = table.add(new WCheckbox(true)).getWidget();
+        table.add(theme.label("Unknown Hosts:")).widget().tooltip = "";
+        removeUnknown = table.add(theme.checkbox(true)).widget();
         table.row();
-        table.add(new WLabel("Outdated Servers:"));
-        removeOutdated = table.add(new WCheckbox(false)).getWidget();
+        table.add(theme.label("Outdated Servers:"));
+        removeOutdated = table.add(theme.checkbox(false)).widget();
         table.row();
-        table.add(new WLabel("Failed Ping:"));
-        removeFailed = table.add(new WCheckbox(true)).getWidget();
+        table.add(theme.label("Failed Ping:"));
+        removeFailed = table.add(theme.checkbox(true)).widget();
         table.row();
-        table.add(new WLabel("\"Server discovery\" Servers:"));
-        removeGriefMe = table.add(new WCheckbox(false)).getWidget();
+        table.add(theme.label("\"Server discovery\" Servers:"));
+        removeGriefMe = table.add(theme.checkbox(false)).widget();
         table.row();
-        table.add(new WLabel("Everything:")).getWidget().color = new Color(255, 0, 0);
-        removeAll = table.add(new WCheckbox(false)).getWidget();
+        table.add(theme.label("Everything:")).widget().color = new Color(255, 0, 0);
+        removeAll = table.add(theme.checkbox(false)).widget();
         table.row();
-        table.add(new WLabel("Rename all Servers:"));
-        rename = table.add(new WCheckbox(true)).getWidget();
+        table.add(theme.label("Rename all Servers:"));
+        rename = table.add(theme.checkbox(true)).widget();
         table.row();
-        table.add(new WButton("Execute!")).fillX().expandX().getWidget().action = this::cleanUp;
+        table.add(theme.button("Execute!")).expandX().widget().action = this::cleanUp;
     }
 
     private void cleanUp()
