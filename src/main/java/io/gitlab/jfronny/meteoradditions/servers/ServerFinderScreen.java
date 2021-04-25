@@ -8,6 +8,7 @@ import minegame159.meteorclient.gui.widgets.input.WTextBox;
 import minegame159.meteorclient.gui.widgets.input.WIntEdit;
 import minegame159.meteorclient.gui.widgets.containers.WTable;
 import minegame159.meteorclient.gui.widgets.WLabel;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.network.ServerInfo;
 
@@ -30,10 +31,10 @@ public class ServerFinderScreen extends WindowScreen {
     private int checked;
     private int working;
 
-    public ServerFinderScreen(GuiTheme theme, MultiplayerScreen multiplayerScreen) {
+    public ServerFinderScreen(GuiTheme theme, MultiplayerScreen multiplayerScreen, Screen parent) {
         super(theme, "Server Discovery");
         this.multiplayerScreen = multiplayerScreen;
-        this.parent = multiplayerScreen;
+        this.parent = parent;
         WTable table = add(new WTable()).widget();
         table.add(theme.label("This will search for servers with similar IPs"));
         table.row();

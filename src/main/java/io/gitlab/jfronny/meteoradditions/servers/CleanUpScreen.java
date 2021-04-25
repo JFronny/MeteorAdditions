@@ -7,6 +7,7 @@ import minegame159.meteorclient.gui.widgets.pressable.WCheckbox;
 import minegame159.meteorclient.gui.widgets.containers.WTable;
 import minegame159.meteorclient.utils.render.color.Color;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
@@ -20,10 +21,10 @@ public class CleanUpScreen extends WindowScreen {
     private final WCheckbox removeGriefMe;
     private final WCheckbox rename;
 
-    public CleanUpScreen(GuiTheme theme, MultiplayerScreen multiplayerScreen) {
+    public CleanUpScreen(GuiTheme theme, MultiplayerScreen multiplayerScreen, Screen parent) {
         super(theme, "Clean Up");
         this.multiplayerScreen = multiplayerScreen;
-        this.parent = multiplayerScreen;
+        this.parent = parent;
         WTable table = add(new WTable()).widget();
         table.add(theme.label("Remove:"));
         table.row();
