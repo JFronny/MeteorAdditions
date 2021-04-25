@@ -1,7 +1,7 @@
 package io.gitlab.jfronny.meteoradditions;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import minegame159.meteorclient.commands.Command;
+import minegame159.meteorclient.systems.commands.Command;
 import minegame159.meteorclient.utils.player.ChatUtils;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.item.ItemStack;

@@ -1,8 +1,8 @@
 package io.gitlab.jfronny.meteoradditions;
 
 import minegame159.meteorclient.MeteorAddon;
-import minegame159.meteorclient.commands.Commands;
-import minegame159.meteorclient.modules.Modules;
+import minegame159.meteorclient.systems.commands.Commands;
+import minegame159.meteorclient.systems.modules.Modules;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

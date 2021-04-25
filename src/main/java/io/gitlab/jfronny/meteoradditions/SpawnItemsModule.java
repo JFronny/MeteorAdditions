@@ -1,10 +1,9 @@
 package io.gitlab.jfronny.meteoradditions;
 
-import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import meteordevelopment.orbit.EventHandler;
 import minegame159.meteorclient.events.world.TickEvent;
-import minegame159.meteorclient.modules.Categories;
-import minegame159.meteorclient.modules.Module;
+import minegame159.meteorclient.systems.modules.Categories;
+import minegame159.meteorclient.systems.modules.Module;
 import minegame159.meteorclient.settings.IntSetting;
 import minegame159.meteorclient.settings.Setting;
 import minegame159.meteorclient.settings.SettingGroup;
@@ -65,7 +64,8 @@ public class SpawnItemsModule extends Module {
                             new ItemStack(Registry.ITEM.getRandom(random), size)));
         }
 
-        for(int i = 9; i < 9 + stacks; i++)
-            InvUtils.clickSlot(InvUtils.invIndexToSlotId(i), 1, SlotActionType.THROW);
+        for(int i = 9; i < 9 + stacks; i++) {
+            InvUtils.drop().slot(i);
+        }
     }
 }
