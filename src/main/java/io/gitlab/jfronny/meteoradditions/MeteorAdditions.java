@@ -1,10 +1,8 @@
 package io.gitlab.jfronny.meteoradditions;
 
-import io.gitlab.jfronny.meteoradditions.gui.theme.MATheme;
 import io.gitlab.jfronny.meteoradditions.modules.GiveCommand;
 import io.gitlab.jfronny.meteoradditions.modules.SpawnItemsModule;
 import minegame159.meteorclient.MeteorAddon;
-import minegame159.meteorclient.gui.GuiThemes;
 import minegame159.meteorclient.systems.commands.Commands;
 import minegame159.meteorclient.systems.modules.Modules;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +15,5 @@ public class MeteorAdditions extends MeteorAddon {
         Modules reg = Modules.get();
         reg.add(new SpawnItemsModule());
         Commands.get().add(new GiveCommand());
-        GuiThemes.add(new MATheme());
     }
 }
