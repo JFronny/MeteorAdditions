@@ -1,6 +1,6 @@
-package io.gitlab.jfronny.meteoradditions.servers;
+package io.gitlab.jfronny.meteoradditions.gui.servers;
 
-import io.gitlab.jfronny.meteoradditions.IMultiplayerScreen;
+import io.gitlab.jfronny.meteoradditions.mixininterface.IMultiplayerScreen;
 import minegame159.meteorclient.gui.GuiTheme;
 import minegame159.meteorclient.gui.WindowScreen;
 import minegame159.meteorclient.gui.widgets.pressable.WCheckbox;

@@ -1,4 +1,4 @@
-package io.gitlab.jfronny.meteoradditions.servers;
+package io.gitlab.jfronny.meteoradditions.gui.servers;
 
 import minegame159.meteorclient.gui.GuiTheme;
 import minegame159.meteorclient.gui.WindowScreen;

@@ -12,6 +12,7 @@ group = project.maven_group
 
 repositories {
     maven { url "https://jitpack.io" }
+    maven { url "https://maven.terraformersmc.com/" }
 }
 
 dependencies {
@@ -27,6 +28,7 @@ dependencies {
     // You may need to force-disable transitiveness on them.
 
     modImplementation "com.github.JFronny:meteor-client:master-SNAPSHOT"
+    modImplementation "com.terraformersmc:modmenu:1.16.9"
 }
 
 processResources {

@@ -1,17 +1,16 @@
-package io.gitlab.jfronny.meteoradditions;
+package io.gitlab.jfronny.meteoradditions.modules;
 
 import meteordevelopment.orbit.EventHandler;
 import minegame159.meteorclient.events.world.TickEvent;
-import minegame159.meteorclient.systems.modules.Categories;
-import minegame159.meteorclient.systems.modules.Module;
 import minegame159.meteorclient.settings.IntSetting;
 import minegame159.meteorclient.settings.Setting;
 import minegame159.meteorclient.settings.SettingGroup;
+import minegame159.meteorclient.systems.modules.Categories;
+import minegame159.meteorclient.systems.modules.Module;
 import minegame159.meteorclient.utils.player.ChatUtils;
 import minegame159.meteorclient.utils.player.InvUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
-import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Random;

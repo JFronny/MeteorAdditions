@@ -1,4 +1,4 @@
-package io.gitlab.jfronny.meteoradditions.servers;
+package io.gitlab.jfronny.meteoradditions.util;
 
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import net.minecraft.client.network.MultiplayerServerListPinger;

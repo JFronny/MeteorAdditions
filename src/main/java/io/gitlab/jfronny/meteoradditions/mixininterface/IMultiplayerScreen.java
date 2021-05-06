@@ -1,4 +1,4 @@
-package io.gitlab.jfronny.meteoradditions;
+package io.gitlab.jfronny.meteoradditions.mixininterface;
 
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 

@@ -1,7 +1,7 @@
 package io.gitlab.jfronny.meteoradditions.mixin;
 
-import io.gitlab.jfronny.meteoradditions.IMultiplayerScreen;
-import io.gitlab.jfronny.meteoradditions.servers.ServerManagerScreen;
+import io.gitlab.jfronny.meteoradditions.mixininterface.IMultiplayerScreen;
+import io.gitlab.jfronny.meteoradditions.gui.servers.ServerManagerScreen;
 import minegame159.meteorclient.gui.GuiThemes;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;

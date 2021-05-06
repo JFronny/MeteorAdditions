@@ -12,6 +12,9 @@
   "entrypoints": {
     "meteor": [
       "io.gitlab.jfronny.meteoradditions.MeteorAdditions"
+    ],
+    "modmenu": [
+      "io.gitlab.jfronny.meteoradditions.ModMenuCompat"
     ]
   },
   "mixins": [
@@ -20,6 +23,12 @@
   "depends": {
     "fabricloader": ">=0.11.2",
     "fabric": "*",
-    "minecraft": "1.16.5"
+    "minecraft": "1.16.5",
+    "meteor-client": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "meteor-client"
+    }
   }
 }

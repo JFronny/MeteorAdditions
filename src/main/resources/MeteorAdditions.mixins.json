@@ -4,9 +4,9 @@
   "package": "io.gitlab.jfronny.meteoradditions.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MultiplayerScreenMixin"
   ],
   "client": [
+    "MultiplayerScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
