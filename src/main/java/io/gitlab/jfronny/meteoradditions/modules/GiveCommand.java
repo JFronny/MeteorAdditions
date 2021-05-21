@@ -4,7 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import minegame159.meteorclient.systems.commands.Command;
 import minegame159.meteorclient.utils.player.ChatUtils;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.command.CommandSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +20,7 @@ public class GiveCommand extends Command {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
+    public void build(LiteralArgumentBuilder<CommandSource> builder) {
         buildArg(builder, "crash-chest", () -> {
             ItemStack stack = new ItemStack(Items.CHEST);
             CompoundTag nbtCompound = new CompoundTag();
@@ -95,7 +95,7 @@ public class GiveCommand extends Command {
         tag.add(enchant);
     }
 
-    private void buildArg(LiteralArgumentBuilder<FabricClientCommandSource> builder, String name, Callable<ItemStack> stack) {
+    private void buildArg(LiteralArgumentBuilder<CommandSource> builder, String name, Callable<ItemStack> stack) {
         builder.then(literal(name).executes(context -> {
             if (mc.player == null) MeteorAdditions.LOG.warn("GiveItem modules may only be used in a world");
             else if(!mc.player.abilities.creativeMode) ChatUtils.error("Creative mode only.");
