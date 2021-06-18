@@ -15,7 +15,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Random;
 
-public class SpawnItemsModule extends Module {
+public class SpawnItems extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final Setting<Integer> speed = sgGeneral.add(new IntSetting.Builder()
             .name("speed")
@@ -39,7 +39,7 @@ public class SpawnItemsModule extends Module {
 
     private final Random random = new Random();
 
-    public SpawnItemsModule() {
+    public SpawnItems() {
         super(Categories.Misc, "spawn-items", "Spawns a lot of unwanted items");
     }
 
