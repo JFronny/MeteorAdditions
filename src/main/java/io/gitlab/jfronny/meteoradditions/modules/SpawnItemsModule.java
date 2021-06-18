@@ -1,14 +1,14 @@
 package io.gitlab.jfronny.meteoradditions.modules;
 
 import meteordevelopment.orbit.EventHandler;
-import minegame159.meteorclient.events.world.TickEvent;
-import minegame159.meteorclient.settings.IntSetting;
-import minegame159.meteorclient.settings.Setting;
-import minegame159.meteorclient.settings.SettingGroup;
-import minegame159.meteorclient.systems.modules.Categories;
-import minegame159.meteorclient.systems.modules.Module;
-import minegame159.meteorclient.utils.player.ChatUtils;
-import minegame159.meteorclient.utils.player.InvUtils;
+import meteordevelopment.meteorclient.events.world.TickEvent;
+import meteordevelopment.meteorclient.settings.IntSetting;
+import meteordevelopment.meteorclient.settings.Setting;
+import meteordevelopment.meteorclient.settings.SettingGroup;
+import meteordevelopment.meteorclient.systems.modules.Categories;
+import meteordevelopment.meteorclient.systems.modules.Module;
+import meteordevelopment.meteorclient.utils.player.ChatUtils;
+import meteordevelopment.meteorclient.utils.player.InvUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.util.registry.Registry;
@@ -45,7 +45,7 @@ public class SpawnItemsModule extends Module {
 
     @Override
     public void onActivate() {
-        if(!mc.player.abilities.creativeMode)
+        if(!mc.player.getAbilities().creativeMode)
         {
             ChatUtils.error("Creative mode only.");
             this.toggle();
@@ -56,8 +56,7 @@ public class SpawnItemsModule extends Module {
     private void onTick(TickEvent.Post event) {
         int stacks = speed.get();
         int size = stackSize.get();
-        for(int i = 9; i < 9 + stacks; i++)
-        {
+        for(int i = 9; i < 9 + stacks; i++) {
             mc.player.networkHandler.sendPacket(
                     new CreativeInventoryActionC2SPacket(i,
                             new ItemStack(Registry.ITEM.getRandom(random), size)));

@@ -1,11 +1,11 @@
 package io.gitlab.jfronny.meteoradditions.gui.servers;
 
 import io.gitlab.jfronny.meteoradditions.mixininterface.IMultiplayerScreen;
-import minegame159.meteorclient.gui.GuiTheme;
-import minegame159.meteorclient.gui.WindowScreen;
-import minegame159.meteorclient.gui.widgets.pressable.WCheckbox;
-import minegame159.meteorclient.gui.widgets.containers.WTable;
-import minegame159.meteorclient.utils.render.color.Color;
+import meteordevelopment.meteorclient.gui.GuiTheme;
+import meteordevelopment.meteorclient.gui.WindowScreen;
+import meteordevelopment.meteorclient.gui.widgets.pressable.WCheckbox;
+import meteordevelopment.meteorclient.gui.widgets.containers.WTable;
+import meteordevelopment.meteorclient.utils.render.color.Color;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;

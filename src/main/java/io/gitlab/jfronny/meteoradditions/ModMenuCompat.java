@@ -3,11 +3,11 @@ package io.gitlab.jfronny.meteoradditions;
 import com.google.common.collect.ImmutableMap;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import minegame159.meteorclient.gui.GuiTheme;
-import minegame159.meteorclient.gui.GuiThemes;
-import minegame159.meteorclient.gui.tabs.Tab;
-import minegame159.meteorclient.gui.tabs.TabScreen;
-import minegame159.meteorclient.gui.tabs.Tabs;
+import meteordevelopment.meteorclient.gui.GuiTheme;
+import meteordevelopment.meteorclient.gui.GuiThemes;
+import meteordevelopment.meteorclient.gui.tabs.Tab;
+import meteordevelopment.meteorclient.gui.tabs.TabScreen;
+import meteordevelopment.meteorclient.gui.tabs.Tabs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;

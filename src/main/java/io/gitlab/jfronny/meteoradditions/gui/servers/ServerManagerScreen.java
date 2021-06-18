@@ -1,11 +1,11 @@
 package io.gitlab.jfronny.meteoradditions.gui.servers;
 
-import minegame159.meteorclient.gui.GuiTheme;
-import minegame159.meteorclient.gui.WindowScreen;
-import minegame159.meteorclient.gui.widgets.containers.WContainer;
-import minegame159.meteorclient.gui.widgets.containers.WHorizontalList;
-import minegame159.meteorclient.gui.widgets.pressable.WButton;
-import minegame159.meteorclient.utils.misc.IGetter;
+import meteordevelopment.meteorclient.gui.GuiTheme;
+import meteordevelopment.meteorclient.gui.WindowScreen;
+import meteordevelopment.meteorclient.gui.widgets.containers.WContainer;
+import meteordevelopment.meteorclient.gui.widgets.containers.WHorizontalList;
+import meteordevelopment.meteorclient.gui.widgets.pressable.WButton;
+import meteordevelopment.meteorclient.utils.misc.IGetter;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 

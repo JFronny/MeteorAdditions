@@ -2,13 +2,13 @@ package io.gitlab.jfronny.meteoradditions.modules;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
-import minegame159.meteorclient.systems.commands.Command;
-import minegame159.meteorclient.utils.player.ChatUtils;
+import meteordevelopment.meteorclient.systems.commands.Command;
+import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import net.minecraft.command.CommandSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.text.LiteralText;
 
@@ -23,10 +23,10 @@ public class GiveCommand extends Command {
     public void build(LiteralArgumentBuilder<CommandSource> builder) {
         buildArg(builder, "crash-chest", () -> {
             ItemStack stack = new ItemStack(Items.CHEST);
-            CompoundTag nbtCompound = new CompoundTag();
-            ListTag nbtList = new ListTag();
+            NbtCompound nbtCompound = new NbtCompound();
+            NbtList nbtList = new NbtList();
             for(int i = 0; i < 40000; i++)
-                nbtList.add(new ListTag());
+                nbtList.add(new NbtList());
             nbtCompound.put("nothingsuspicioushere", nbtList);
             stack.setTag(nbtCompound);
             stack.setCustomName(new LiteralText("Copy Me"));
@@ -34,13 +34,13 @@ public class GiveCommand extends Command {
         });
         buildArg(builder, "kill-potion", () -> {
             ItemStack stack = new ItemStack(Items.SPLASH_POTION);
-            CompoundTag effect = new CompoundTag();
+            NbtCompound effect = new NbtCompound();
             effect.putInt("Amplifier", 125);
             effect.putInt("Duration", 2000);
             effect.putInt("Id", 6);
-            ListTag effects = new ListTag();
+            NbtList effects = new NbtList();
             effects.add(effect);
-            CompoundTag nbt = new CompoundTag();
+            NbtCompound nbt = new NbtCompound();
             nbt.put("CustomPotionEffects", effects);
             stack.setTag(nbt);
             String name = "\u00a7rSplash Potion of \u00a74\u00a7lINSTANT DEATH";
@@ -49,7 +49,7 @@ public class GiveCommand extends Command {
         });
         buildArg(builder, "32k-sword", () -> {
             ItemStack stack = new ItemStack(Items.NETHERITE_SWORD);
-            ListTag enchants = new ListTag();
+            NbtList enchants = new NbtList();
             addEnchant(enchants, "minecraft:sharpness");
             addEnchant(enchants, "minecraft:knockback");
             addEnchant(enchants, "minecraft:fire_aspect");
@@ -58,7 +58,7 @@ public class GiveCommand extends Command {
             addEnchant(enchants, "minecraft:unbreaking");
             addEnchant(enchants, "minecraft:mending", (short)1);
             addEnchant(enchants, "minecraft:vanishing_curse", (short)1);
-            CompoundTag nbt = new CompoundTag();
+            NbtCompound nbt = new NbtCompound();
             nbt.put("Enchantments", enchants);
             stack.setTag(nbt);
             stack.setCustomName(new LiteralText("Bonk"));
@@ -66,16 +66,16 @@ public class GiveCommand extends Command {
         });
         buildArg(builder, "troll-potion", () -> {
             ItemStack stack = new ItemStack(Items.SPLASH_POTION);
-            ListTag effects = new ListTag();
+            NbtList effects = new NbtList();
             for(int i = 1; i <= 23; i++)
             {
-                CompoundTag effect = new CompoundTag();
+                NbtCompound effect = new NbtCompound();
                 effect.putInt("Amplifier", Integer.MAX_VALUE);
                 effect.putInt("Duration", Integer.MAX_VALUE);
                 effect.putInt("Id", i);
                 effects.add(effect);
             }
-            CompoundTag nbt = new CompoundTag();
+            NbtCompound nbt = new NbtCompound();
             nbt.put("CustomPotionEffects", effects);
             stack.setTag(nbt);
             String name = "\u00a7rSplash Potion of Trolling";
@@ -84,12 +84,12 @@ public class GiveCommand extends Command {
         });
     }
 
-    private void addEnchant(ListTag tag, String id) {
+    private void addEnchant(NbtList tag, String id) {
         addEnchant(tag, id, Short.MAX_VALUE);
     }
 
-    private void addEnchant(ListTag tag, String id, short v) {
-        CompoundTag enchant = new CompoundTag();
+    private void addEnchant(NbtList tag, String id, short v) {
+        NbtCompound enchant = new NbtCompound();
         enchant.putShort("lvl", v);
         enchant.putString("id", id);
         tag.add(enchant);
@@ -98,11 +98,11 @@ public class GiveCommand extends Command {
     private void buildArg(LiteralArgumentBuilder<CommandSource> builder, String name, Callable<ItemStack> stack) {
         builder.then(literal(name).executes(context -> {
             if (mc.player == null) MeteorAdditions.LOG.warn("GiveItem modules may only be used in a world");
-            else if(!mc.player.abilities.creativeMode) ChatUtils.error("Creative mode only.");
+            else if(!mc.player.getAbilities().creativeMode) ChatUtils.error("Creative mode only.");
             else {
                 for(int i = 0; i < 9; i++)
                 {
-                    if(!mc.player.inventory.getStack(i).isEmpty()) continue;
+                    if(!mc.player.getInventory().getStack(i).isEmpty()) continue;
 
                     try {
                         mc.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + i, stack.call()));
