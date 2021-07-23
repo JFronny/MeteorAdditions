@@ -67,7 +67,7 @@ public class CleanUpScreen extends WindowScreen {
             }
 
         saveServerList();
-        client.openScreen(parent);
+        client.setScreen(parent);
     }
 
     private boolean shouldRemove(ServerInfo server)

@@ -20,6 +20,6 @@ public class ServerManagerScreen extends WindowScreen {
 
     private void addButton(WContainer c, String text, IGetter<Screen> action) {
         WButton button = c.add(theme.button(text)).expandX().widget();
-        button.action = () -> client.openScreen(action.get());
+        button.action = () -> client.setScreen(action.get());
     }
 }

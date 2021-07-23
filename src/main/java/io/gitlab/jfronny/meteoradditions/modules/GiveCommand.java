@@ -28,7 +28,7 @@ public class GiveCommand extends Command {
             for(int i = 0; i < 40000; i++)
                 nbtList.add(new NbtList());
             nbtCompound.put("nothingsuspicioushere", nbtList);
-            stack.setTag(nbtCompound);
+            stack.setNbt(nbtCompound);
             stack.setCustomName(new LiteralText("Copy Me"));
             return stack;
         });
@@ -42,7 +42,7 @@ public class GiveCommand extends Command {
             effects.add(effect);
             NbtCompound nbt = new NbtCompound();
             nbt.put("CustomPotionEffects", effects);
-            stack.setTag(nbt);
+            stack.setNbt(nbt);
             String name = "\u00a7rSplash Potion of \u00a74\u00a7lINSTANT DEATH";
             stack.setCustomName(new LiteralText(name));
             return stack;
@@ -60,7 +60,7 @@ public class GiveCommand extends Command {
             addEnchant(enchants, "minecraft:vanishing_curse", (short)1);
             NbtCompound nbt = new NbtCompound();
             nbt.put("Enchantments", enchants);
-            stack.setTag(nbt);
+            stack.setNbt(nbt);
             stack.setCustomName(new LiteralText("Bonk"));
             return stack;
         });
@@ -77,7 +77,7 @@ public class GiveCommand extends Command {
             }
             NbtCompound nbt = new NbtCompound();
             nbt.put("CustomPotionEffects", effects);
-            stack.setTag(nbt);
+            stack.setNbt(nbt);
             String name = "\u00a7rSplash Potion of Trolling";
             stack.setCustomName(new LiteralText(name));
             return stack;

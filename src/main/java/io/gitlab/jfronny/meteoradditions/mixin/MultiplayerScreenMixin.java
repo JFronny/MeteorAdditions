@@ -26,7 +26,7 @@ public abstract class MultiplayerScreenMixin extends Screen implements IMultipla
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo info) {
         addDrawableChild(new ButtonWidget(this.width - 75 - 3 - 75 - 2 - 75 - 2, 3, 75, 20, new LiteralText("Servers"), button -> {
-            client.openScreen(new ServerManagerScreen(GuiThemes.get(), (MultiplayerScreen) (Object) this));
+            client.setScreen(new ServerManagerScreen(GuiThemes.get(), (MultiplayerScreen) (Object) this));
         }));
     }
 
