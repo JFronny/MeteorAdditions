@@ -2,9 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "io.gitlab.jfronny.meteoradditions.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
-  ],
+  "compatibilityLevel": "JAVA_16",
   "client": [
     "MultiplayerScreenMixin"
   ],

@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "MeteorAdditions",
   "description": "",
-  "authors": [],
+  "authors": ["JFronny"],
   "contact": {},
   "license": "MIT",
   "icon": "assets/MeteorAdditions/icon.png",
@@ -23,12 +23,13 @@
   "depends": {
     "fabricloader": ">=0.11.2",
     "fabric": "*",
-    "minecraft": "1.17.*",
+    "minecraft": ">=@mc_version@",
     "meteor-client": "*"
   },
   "custom": {
     "modmenu": {
       "parent": "meteor-client"
-    }
+    },
+    "meteor-client:color": "225,25,25"
   }
 }

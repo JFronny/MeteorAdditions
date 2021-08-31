@@ -105,7 +105,8 @@ public class GiveCommand extends Command {
                     if(!mc.player.getInventory().getStack(i).isEmpty()) continue;
 
                     try {
-                        mc.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + i, stack.call()));
+                        CreativeInventoryActionC2SPacket packet = new CreativeInventoryActionC2SPacket(36 + i, stack.call());
+                        mc.execute(() -> mc.player.networkHandler.sendPacket(packet));
                     } catch (Exception e) {
                         e.printStackTrace();
                         ChatUtils.error("Could not create stack, see logs");
