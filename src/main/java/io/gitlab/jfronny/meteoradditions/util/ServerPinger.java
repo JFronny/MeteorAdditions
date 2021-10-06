@@ -1,68 +1,219 @@
 package io.gitlab.jfronny.meteoradditions.util;
 
-import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
-import net.minecraft.client.network.MultiplayerServerListPinger;
-import net.minecraft.client.network.ServerInfo;
+import io.gitlab.jfronny.meteoradditions.gui.servers.ServerFinderScreen;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ServerPinger {
+public class ServerPinger implements IServerFinderDoneListener, IServerFinderDisconnectListener {
     private static final AtomicInteger threadNumber = new AtomicInteger(0);
-    private ServerInfo server;
+    private MServerInfo server;
     private boolean done = false;
     private boolean failed = false;
+    private Thread thread;
+    private int pingPort;
+    private ServerListPinger pinger;
+    private boolean notifiedDoneListeners = false;
+    private boolean scanPorts;
+    private int searchNumber;
+    private int currentIncrement = 1;
+    private boolean startingIncrement = true;
+    private ArrayList<IServerFinderDoneListener> doneListeners = new ArrayList<>();
+    private int portPingers = 0;
+    private int successfulPortPingers = 0;
+    private String pingIP;
+    private final Object portPingerLock = new Object();
 
-    public void ping(String ip)
-    {
+    public ServerPinger(boolean scanPorts, int searchNumber) {
+        pinger = new ServerListPinger();
+        pinger.addServerFinderDisconnectListener(this);
+        this.scanPorts = scanPorts;
+        this.searchNumber = searchNumber;
+    }
+
+    public void addServerFinderDoneListener(IServerFinderDoneListener listener) {
+        doneListeners.add(listener);
+    }
+
+    public void ping(String ip) {
         ping(ip, 25565);
     }
 
-    public void ping(String ip, int port)
-    {
-        server = new ServerInfo("", ip + ":" + port, false);
-
-        new Thread(() -> pingInCurrentThread(ip, port),
-                "Server Pinger #" + threadNumber.incrementAndGet()).start();
+    public int getSearchNumber() {
+        return searchNumber;
     }
 
-    private void pingInCurrentThread(String ip, int port)
-    {
-        MultiplayerServerListPinger pinger = new MultiplayerServerListPinger();
-        MeteorAdditions.LOG.info("Pinging " + ip + ":" + port + "...");
+    public Thread getThread() {
+        return thread;
+    }
 
-        try
-        {
+    public int getPingPort() {
+        return pingPort;
+    }
+
+    public MServerInfo getServerInfo() {
+        return server;
+    }
+
+    public void ping(String ip, int port) {
+        if (isOldSearch())
+            return;
+
+        pingIP = ip;
+        pingPort = port;
+        server = new MServerInfo("", ip + ":" + port, false);
+        server.version = null;
+
+        if (scanPorts) {
+            thread = new Thread(() -> pingInCurrentThread(ip, port),
+                    "Server Pinger #" + threadNumber.incrementAndGet());
+        }
+        else {
+            thread = new Thread(() -> pingInCurrentThread(ip, port),
+                    "Server Pinger #" + threadNumber + ", " + port);
+        }
+        thread.start();
+    }
+
+    public ServerListPinger getServerListPinger() {
+        return pinger;
+    }
+
+    private boolean isOldSearch() {
+        return ServerFinderScreen.instance == null || ServerFinderScreen.instance.getState() == ServerFinderScreen.ServerFinderState.CANCELLED || ServerFinderScreen.getSearchNumber() != searchNumber;
+    }
+
+    private void runPortIncrement(String ip) {
+        synchronized(portPingerLock) {
+            portPingers = 0;
+            successfulPortPingers = 0;
+        }
+        for (int i = startingIncrement ? 1 : currentIncrement; i < currentIncrement * 2; i++) {
+            if (isOldSearch())
+                return;
+            ServerPinger pp1 = new ServerPinger(false, searchNumber);
+            ServerPinger pp2 = new ServerPinger(false, searchNumber);
+            for (IServerFinderDoneListener doneListener : doneListeners) {
+                pp1.addServerFinderDoneListener(doneListener);
+                pp2.addServerFinderDoneListener(doneListener);
+            }
+            pp1.addServerFinderDoneListener(this);
+            pp2.addServerFinderDoneListener(this);
+            if (ServerFinderScreen.instance != null && !isOldSearch()) {
+                ServerFinderScreen.instance.incrementTargetChecked(2);
+            }
+            pp1.ping(ip, 25565 - i);
+            pp2.ping(ip, 25565 + i);
+        }
+        synchronized(portPingerLock) {
+            currentIncrement *= 2;
+        }
+    }
+
+    private void pingInCurrentThread(String ip, int port) {
+        if (isOldSearch())
+            return;
+
+        //MeteorAdditions.LOG.info("Pinging " + ip + ":" + port + "...");
+
+        try {
             pinger.add(server, () -> {});
-            MeteorAdditions.LOG.info("Ping successful: " + ip + ":" + port);
-
-        }catch(UnknownHostException e)
-        {
-            MeteorAdditions.LOG.warn("Unknown host: " + ip + ":" + port);
+        } catch(UnknownHostException e) {
+            //MeteorAdditions.LOG.error("Unknown host: " + ip + ":" + port);
             failed = true;
-
-        }catch(Exception e2)
-        {
-            MeteorAdditions.LOG.warn("Ping failed: " + ip + ":" + port);
+        } catch(Exception e2) {
+            //MeteorAdditions.LOG.error("Ping failed: " + ip + ":" + port);
             failed = true;
         }
 
-        pinger.cancel();
-        done = true;
+        startingIncrement =  true;
+        if (!failed) {
+            currentIncrement = 8;
+        }
+
+        if (!failed && scanPorts) {
+            runPortIncrement(ip);
+        }
+
+        if (failed) {
+            pinger.cancel();
+            done = true;
+            notifyDoneListeners(false);
+        }
     }
 
-    public boolean isStillPinging()
-    {
+    public boolean isStillPinging() {
         return !done;
     }
 
-    public boolean isWorking()
-    {
+    public boolean isWorking() {
         return !failed;
     }
 
-    public String getServerIP()
-    {
+    public boolean isOtherVersion() {
+        return server.protocolVersion != 47;
+    }
+
+    public String getServerIP() {
         return server.address;
+    }
+
+    @Override
+    public void onServerDisconnect() {
+        if (isOldSearch())
+            return;
+
+        pinger.cancel();
+        done = true;
+        notifyDoneListeners(false);
+    }
+
+    private void notifyDoneListeners(boolean failure) {
+        synchronized(this) {
+            if (!notifiedDoneListeners) {
+                notifiedDoneListeners = true;
+                for (IServerFinderDoneListener doneListener : doneListeners) {
+                    if (doneListener != null) {
+                        if (failure) {
+                            doneListener.onServerFailed(this);
+                        }
+                        else {
+                            doneListener.onServerDone(this);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onServerFailed() {
+        if (isOldSearch())
+            return;
+
+        pinger.cancel();
+        done = true;
+        notifyDoneListeners(true);
+    }
+
+    @Override
+    public void onServerDone(ServerPinger pinger) {
+        synchronized(portPingerLock) {
+            portPingers += 1;
+            if (pinger.isWorking())
+                successfulPortPingers += 1;
+            if (portPingers == (startingIncrement ? currentIncrement * 2 - 2 : currentIncrement) && currentIncrement <= 5000 && successfulPortPingers > 0) {
+                startingIncrement = false;
+                new Thread(() -> runPortIncrement(pingIP)).start();
+            }
+        }
+    }
+
+    @Override
+    public void onServerFailed(ServerPinger pinger) {
+        synchronized(portPingerLock) {
+            portPingers += 1;
+        }
     }
 }

@@ -25,34 +25,42 @@ public class CleanUpScreen extends WindowScreen {
         super(theme, "Clean Up");
         this.multiplayerScreen = multiplayerScreen;
         this.parent = parent;
+        removeUnknown = theme.checkbox(true);
+        removeOutdated = theme.checkbox(false);
+        removeFailed = theme.checkbox(true);
+        removeGriefMe = theme.checkbox(false);
+        removeAll = theme.checkbox(false);
+        rename = theme.checkbox(true);
+    }
+
+    @Override
+    public void initWidgets() {
         WTable table = add(new WTable()).widget();
         table.add(theme.label("Remove:"));
         table.row();
         table.add(theme.label("Unknown Hosts:")).widget().tooltip = "";
-        removeUnknown = table.add(theme.checkbox(true)).widget();
+        table.add(removeUnknown).widget();
         table.row();
         table.add(theme.label("Outdated Servers:"));
-        removeOutdated = table.add(theme.checkbox(false)).widget();
+        table.add(removeOutdated).widget();
         table.row();
         table.add(theme.label("Failed Ping:"));
-        removeFailed = table.add(theme.checkbox(true)).widget();
+        table.add(removeFailed).widget();
         table.row();
         table.add(theme.label("\"Server discovery\" Servers:"));
-        removeGriefMe = table.add(theme.checkbox(false)).widget();
+        table.add(removeGriefMe).widget();
         table.row();
         table.add(theme.label("Everything:")).widget().color = new Color(255, 0, 0);
-        removeAll = table.add(theme.checkbox(false)).widget();
+        table.add(removeAll).widget();
         table.row();
         table.add(theme.label("Rename all Servers:"));
-        rename = table.add(theme.checkbox(true)).widget();
+        table.add(rename).widget();
         table.row();
         table.add(theme.button("Execute!")).expandX().widget().action = this::cleanUp;
     }
 
-    private void cleanUp()
-    {
-        for(int i = multiplayerScreen.getServerList().size() - 1; i >= 0; i--)
-        {
+    private void cleanUp() {
+        for(int i = multiplayerScreen.getServerList().size() - 1; i >= 0; i--) {
             ServerInfo server = multiplayerScreen.getServerList().get(i);
 
             if(removeAll.checked || shouldRemove(server))
@@ -60,8 +68,7 @@ public class CleanUpScreen extends WindowScreen {
         }
 
         if(rename.checked)
-            for(int i = 0; i < multiplayerScreen.getServerList().size(); i++)
-            {
+            for(int i = 0; i < multiplayerScreen.getServerList().size(); i++) {
                 ServerInfo server = multiplayerScreen.getServerList().get(i);
                 server.name = "Server discovery " + (i + 1);
             }
@@ -70,8 +77,7 @@ public class CleanUpScreen extends WindowScreen {
         client.setScreen(parent);
     }
 
-    private boolean shouldRemove(ServerInfo server)
-    {
+    private boolean shouldRemove(ServerInfo server) {
         if(server == null)
             return false;
 
@@ -90,22 +96,18 @@ public class CleanUpScreen extends WindowScreen {
         return false;
     }
 
-    private boolean isUnknownHost(ServerInfo server)
-    {
+    private boolean isUnknownHost(ServerInfo server) {
         if(server.label == null)
             return false;
 
         if(server.label.getString() == null)
             return false;
 
-        return server.label.getString()
-                .equals("\u00a74Can\'t resolve hostname");
+        return server.label.getString().equals("\u00a74Can\'t resolve hostname");
     }
 
-    private boolean isSameProtocol(ServerInfo server)
-    {
-        return server.protocolVersion == SharedConstants.getGameVersion()
-                .getProtocolVersion();
+    private boolean isSameProtocol(ServerInfo server) {
+        return server.protocolVersion == SharedConstants.getGameVersion().getProtocolVersion();
     }
 
     private boolean isFailedPing(ServerInfo server)
@@ -113,17 +115,14 @@ public class CleanUpScreen extends WindowScreen {
         return server.ping != -2L && server.ping < 0L;
     }
 
-    private boolean isGriefMeServer(ServerInfo server)
-    {
+    private boolean isGriefMeServer(ServerInfo server) {
         return server.name != null && server.name.startsWith("Server discovery ");
     }
 
-    private void saveServerList()
-    {
+    private void saveServerList() {
         multiplayerScreen.getServerList().saveFile();
 
-        MultiplayerServerListWidget serverListSelector =
-                ((IMultiplayerScreen)multiplayerScreen).getServerListWidget();
+        MultiplayerServerListWidget serverListSelector = ((IMultiplayerScreen)multiplayerScreen).getServerListWidget();
 
         serverListSelector.setSelected(null);
         serverListSelector.setServers(multiplayerScreen.getServerList());

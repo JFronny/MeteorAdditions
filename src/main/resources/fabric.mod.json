@@ -30,6 +30,6 @@
     "modmenu": {
       "parent": "meteor-client"
     },
-    "meteor-client:color": "225,25,25"
+    "meteor-client:color": "153,0,153"
   }
 }

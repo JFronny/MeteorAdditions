@@ -10,11 +10,18 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 
 public class ServerManagerScreen extends WindowScreen {
+    private final MultiplayerScreen multiplayerScreen;
     public ServerManagerScreen(GuiTheme theme, MultiplayerScreen multiplayerScreen) {
         super(theme, "Manage Servers");
         this.parent = multiplayerScreen;
+        this.multiplayerScreen = multiplayerScreen;
+    }
+
+    @Override
+    public void initWidgets() {
         WHorizontalList l = add(theme.horizontalList()).expandX().widget();
-        addButton(l, "Find Servers", () -> new ServerFinderScreen(theme, multiplayerScreen, this));
+        addButton(l, "Find Servers (new)", () -> new ServerFinderScreen(theme, multiplayerScreen, this));
+        addButton(l, "Find Servers (legacy)", () -> new LegacyServerFinderScreen(theme, multiplayerScreen, this));
         addButton(l, "Clean Up", () -> new CleanUpScreen(theme, multiplayerScreen, this));
     }
 
