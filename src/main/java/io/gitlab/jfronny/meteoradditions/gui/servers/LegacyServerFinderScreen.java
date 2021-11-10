@@ -37,7 +37,7 @@ public class LegacyServerFinderScreen extends WindowScreen {
         this.multiplayerScreen = multiplayerScreen;
         this.parent = parent;
         ipBox = theme.textBox("127.0.0.1");
-        maxThreadsBox = theme.intEdit(128, 1, 256);
+        maxThreadsBox = theme.intEdit(128, 1, 256, 1, 256);
         stateLabel = theme.label("");
         checkedLabel = theme.label("");
         workingLabel = theme.label("");
