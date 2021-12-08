@@ -1,8 +1,8 @@
 plugins {
-    id 'fabric-loom' version '0.9-SNAPSHOT'
+    id 'fabric-loom' version '0.10-SNAPSHOT'
 }
 
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -11,9 +11,14 @@ group = project.maven_group
 repositories {
     maven {
         name = "meteor-maven"
+        url = "https://maven.meteordev.org/releases"
+    }
+    maven {
+        name = "meteor-maven-snapshots"
         url = "https://maven.meteordev.org/snapshots"
     }
     maven { url "https://maven.terraformersmc.com/" }
+    jcenter()
 }
 
 dependencies {
@@ -34,11 +39,10 @@ processResources {
         expand "version": project.version
 
         filter { line -> line.replace("@mc_version@", project.minecraft_version) }
-        filter { line -> line.replace("@meteor_version@", project.meteor_version) }
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
-    it.options.release = 16
+    it.options.release = 17
 }
