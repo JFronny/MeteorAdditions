@@ -1,27 +1,16 @@
 package io.gitlab.jfronny.meteoradditions.modules;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
-import meteordevelopment.meteorclient.systems.commands.Command;
-import meteordevelopment.meteorclient.utils.player.ChatUtils;
-import net.minecraft.command.CommandSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.text.LiteralText;
 
-import java.util.concurrent.Callable;
+import java.util.List;
 
-public class GiveCommand extends Command {
-    public GiveCommand() {
-        super("mgive", "Gives you access to special items");
-    }
-
-    @Override
-    public void build(LiteralArgumentBuilder<CommandSource> builder) {
-        buildArg(builder, "crash-chest", () -> {
+public class AdditionsItemGroup {
+    public static void add(List<ItemStack> stacksForDisplay) {
+        {
             ItemStack stack = new ItemStack(Items.CHEST);
             NbtCompound nbtCompound = new NbtCompound();
             NbtList nbtList = new NbtList();
@@ -29,10 +18,10 @@ public class GiveCommand extends Command {
                 nbtList.add(new NbtList());
             nbtCompound.put("nothingsuspicioushere", nbtList);
             stack.setNbt(nbtCompound);
-            stack.setCustomName(new LiteralText("Copy Me"));
-            return stack;
-        });
-        buildArg(builder, "kill-potion", () -> {
+            stack.setCustomName(new LiteralText("Chest of NBT"));
+            stacksForDisplay.add(stack);
+        }
+        {
             ItemStack stack = new ItemStack(Items.SPLASH_POTION);
             NbtCompound effect = new NbtCompound();
             effect.putInt("Amplifier", 125);
@@ -45,9 +34,9 @@ public class GiveCommand extends Command {
             stack.setNbt(nbt);
             String name = "\u00a7rSplash Potion of \u00a74\u00a7lINSTANT DEATH";
             stack.setCustomName(new LiteralText(name));
-            return stack;
-        });
-        buildArg(builder, "32k-sword", () -> {
+            stacksForDisplay.add(stack);
+        }
+        {
             ItemStack stack = new ItemStack(Items.NETHERITE_SWORD);
             NbtList enchants = new NbtList();
             addEnchant(enchants, "minecraft:sharpness");
@@ -62,9 +51,9 @@ public class GiveCommand extends Command {
             nbt.put("Enchantments", enchants);
             stack.setNbt(nbt);
             stack.setCustomName(new LiteralText("Bonk"));
-            return stack;
-        });
-        buildArg(builder, "troll-potion", () -> {
+            stacksForDisplay.add(stack);
+        }
+        {
             ItemStack stack = new ItemStack(Items.SPLASH_POTION);
             NbtList effects = new NbtList();
             for(int i = 1; i <= 23; i++)
@@ -80,44 +69,18 @@ public class GiveCommand extends Command {
             stack.setNbt(nbt);
             String name = "\u00a7rSplash Potion of Trolling";
             stack.setCustomName(new LiteralText(name));
-            return stack;
-        });
+            stacksForDisplay.add(stack);
+        }
     }
 
-    private void addEnchant(NbtList tag, String id) {
+    private static void addEnchant(NbtList tag, String id) {
         addEnchant(tag, id, Short.MAX_VALUE);
     }
 
-    private void addEnchant(NbtList tag, String id, short v) {
+    private static void addEnchant(NbtList tag, String id, short v) {
         NbtCompound enchant = new NbtCompound();
         enchant.putShort("lvl", v);
         enchant.putString("id", id);
         tag.add(enchant);
-    }
-
-    private void buildArg(LiteralArgumentBuilder<CommandSource> builder, String name, Callable<ItemStack> stack) {
-        builder.then(literal(name).executes(context -> {
-            if (mc.player == null) MeteorAdditions.LOG.warn("GiveItem modules may only be used in a world");
-            else if(!mc.player.getAbilities().creativeMode) ChatUtils.error("Creative mode only.");
-            else {
-                for(int i = 0; i < 9; i++)
-                {
-                    if(!mc.player.getInventory().getStack(i).isEmpty()) continue;
-
-                    try {
-                        CreativeInventoryActionC2SPacket packet = new CreativeInventoryActionC2SPacket(36 + i, stack.call());
-                        mc.execute(() -> mc.player.networkHandler.sendPacket(packet));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        ChatUtils.error("Could not create stack, see logs");
-                    }
-                    ChatUtils.info("Item created.");
-                    return com.mojang.brigadier.Command.SINGLE_SUCCESS;
-                }
-
-                ChatUtils.error("Please clear a slot in your hotbar.");
-            }
-            return com.mojang.brigadier.Command.SINGLE_SUCCESS;
-        }));
     }
 }
