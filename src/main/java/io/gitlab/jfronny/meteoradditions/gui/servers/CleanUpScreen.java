@@ -1,6 +1,6 @@
 package io.gitlab.jfronny.meteoradditions.gui.servers;
 
-import io.gitlab.jfronny.meteoradditions.mixininterface.IMultiplayerScreen;
+import io.gitlab.jfronny.meteoradditions.mixin.MultiplayerScreenAccessor;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.WindowScreen;
 import meteordevelopment.meteorclient.gui.widgets.pressable.WCheckbox;
@@ -103,7 +103,7 @@ public class CleanUpScreen extends WindowScreen {
         if(server.label.getString() == null)
             return false;
 
-        return server.label.getString().equals("\u00a74Can\'t resolve hostname");
+        return server.label.getString().equals("\u00a74Can't resolve hostname");
     }
 
     private boolean isSameProtocol(ServerInfo server) {
@@ -122,7 +122,7 @@ public class CleanUpScreen extends WindowScreen {
     private void saveServerList() {
         multiplayerScreen.getServerList().saveFile();
 
-        MultiplayerServerListWidget serverListSelector = ((IMultiplayerScreen)multiplayerScreen).getServerListWidget();
+        MultiplayerServerListWidget serverListSelector = ((MultiplayerScreenAccessor)multiplayerScreen).getServerListWidget();
 
         serverListSelector.setSelected(null);
         serverListSelector.setServers(multiplayerScreen.getServerList());

@@ -1,6 +1,6 @@
 package io.gitlab.jfronny.meteoradditions.gui.servers;
 
-import io.gitlab.jfronny.meteoradditions.mixininterface.IMultiplayerScreen;
+import io.gitlab.jfronny.meteoradditions.mixin.MultiplayerScreenAccessor;
 import io.gitlab.jfronny.meteoradditions.util.LegacyServerPinger;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.WindowScreen;
@@ -163,9 +163,9 @@ public class LegacyServerFinderScreen extends WindowScreen {
                                 .add(new ServerInfo("Server discovery " + working,
                                         pingers.get(i).getServerIP(), false));
                         multiplayerScreen.getServerList().saveFile();
-                        ((IMultiplayerScreen)multiplayerScreen).getServerListWidget()
+                        ((MultiplayerScreenAccessor)multiplayerScreen).getServerListWidget()
                                 .setSelected(null);
-                        ((IMultiplayerScreen)multiplayerScreen).getServerListWidget()
+                        ((MultiplayerScreenAccessor)multiplayerScreen).getServerListWidget()
                                 .setServers(multiplayerScreen.getServerList());
                     }
                 }

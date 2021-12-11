@@ -1,3 +1,6 @@
 {
-  "itemGroup.meteor-additions.general": "MeteorAdditions"
+  "itemGroup.meteor-additions.general": "MeteorAdditions",
+  "meteor-additions.saved-ip": "Saved %s new IP",
+  "meteor-additions.saved-ips": "Saved %s new IPs",
+  "meteor-additions.saved-ip-success": "Success!"
 }

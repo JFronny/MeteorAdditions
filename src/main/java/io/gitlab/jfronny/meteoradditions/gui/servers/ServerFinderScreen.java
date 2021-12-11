@@ -1,8 +1,6 @@
 package io.gitlab.jfronny.meteoradditions.gui.servers;
 
-import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
-import io.gitlab.jfronny.meteoradditions.mixininterface.IMultiplayerScreen;
-import io.gitlab.jfronny.meteoradditions.util.IPAddress;
+import io.gitlab.jfronny.meteoradditions.mixin.MultiplayerScreenAccessor;
 import io.gitlab.jfronny.meteoradditions.util.IServerFinderDoneListener;
 import io.gitlab.jfronny.meteoradditions.util.MServerInfo;
 import io.gitlab.jfronny.meteoradditions.util.ServerPinger;
@@ -15,17 +13,12 @@ import meteordevelopment.meteorclient.gui.widgets.input.WIntEdit;
 import meteordevelopment.meteorclient.gui.widgets.input.WTextBox;
 import meteordevelopment.meteorclient.gui.widgets.pressable.WButton;
 import meteordevelopment.meteorclient.gui.widgets.pressable.WCheckbox;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.option.ServerList;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 public class ServerFinderScreen extends WindowScreen implements IServerFinderDoneListener {
@@ -96,7 +89,6 @@ public class ServerFinderScreen extends WindowScreen implements IServerFinderDon
         add(workingLabel);
         WHorizontalList list = add(theme.horizontalList()).expandX().widget();
         list.add(searchButton).expandX();
-        list.add(theme.button("Save")).expandX().widget().action = this::saveToFile;
         searchButton.action = this::searchOrCancel;
     }
 
@@ -113,47 +105,6 @@ public class ServerFinderScreen extends WindowScreen implements IServerFinderDon
 
     public ServerFinderState getState() {
         return state;
-    }
-
-    private void saveToFile() {
-        int newIPs = 0;
-
-        Path filePath = FabricLoader.getInstance().getGameDir().resolve("servers.txt");
-        Set<IPAddress> hashedIPs = new HashSet<>();
-        if (Files.exists(filePath)) {
-            try {
-                List<String> ips = Files.readAllLines(filePath);
-                for (String ip: ips) {
-                    IPAddress parsedIP = IPAddress.fromText(ip);
-                    if (parsedIP != null)
-                        hashedIPs.add(parsedIP);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        ServerList servers = multiplayerScreen.getServerList();
-        for (int i = 0; i < servers.size(); i++) {
-            ServerInfo info = servers.get(i);
-            IPAddress addr = IPAddress.fromText(info.address);
-            if (addr != null && hashedIPs.add(addr))
-                newIPs++;
-        }
-
-        StringBuilder fileOutput = new StringBuilder();
-        for (IPAddress ip : hashedIPs) {
-            String stringIP = ip.toString();
-            if (stringIP != null)
-                fileOutput.append(stringIP).append("\n");
-        }
-        try {
-            Files.writeString(filePath, fileOutput.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        MeteorAdditions.LOG.info("Saved " + newIPs + " new IP" + (newIPs == 1 ? "" : "s"));
     }
 
     private void searchOrCancel() {
@@ -325,8 +276,8 @@ public class ServerFinderScreen extends WindowScreen implements IServerFinderDon
                     working++;
                     multiplayerScreen.getServerList().add(new ServerInfo("Server discovery #" + working, pinger.getServerIP(), false));
                     multiplayerScreen.getServerList().saveFile();
-                    ((IMultiplayerScreen) multiplayerScreen).getServerListWidget().setSelected(null);
-                    ((IMultiplayerScreen) multiplayerScreen).getServerListWidget().setServers(multiplayerScreen.getServerList());
+                    ((MultiplayerScreenAccessor) multiplayerScreen).getServerListWidget().setSelected(null);
+                    ((MultiplayerScreenAccessor) multiplayerScreen).getServerListWidget().setServers(multiplayerScreen.getServerList());
                 }
             }
         }
