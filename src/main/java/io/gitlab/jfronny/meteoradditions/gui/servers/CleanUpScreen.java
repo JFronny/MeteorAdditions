@@ -1,6 +1,7 @@
 package io.gitlab.jfronny.meteoradditions.gui.servers;
 
 import io.gitlab.jfronny.meteoradditions.mixin.MultiplayerScreenAccessor;
+import io.gitlab.jfronny.meteoradditions.mixin.ServerListAccessor;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.WindowScreen;
 import meteordevelopment.meteorclient.gui.widgets.pressable.WCheckbox;
@@ -12,6 +13,10 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class CleanUpScreen extends WindowScreen {
     private final MultiplayerScreen multiplayerScreen;
     private final WCheckbox removeAll;
@@ -19,6 +24,7 @@ public class CleanUpScreen extends WindowScreen {
     private final WCheckbox removeOutdated;
     private final WCheckbox removeUnknown;
     private final WCheckbox removeGriefMe;
+    private final WCheckbox removeDuplicates;
     private final WCheckbox rename;
 
     public CleanUpScreen(GuiTheme theme, MultiplayerScreen multiplayerScreen, Screen parent) {
@@ -30,6 +36,7 @@ public class CleanUpScreen extends WindowScreen {
         removeFailed = theme.checkbox(true);
         removeGriefMe = theme.checkbox(false);
         removeAll = theme.checkbox(false);
+        removeDuplicates = theme.checkbox(true);
         rename = theme.checkbox(true);
     }
 
@@ -53,6 +60,9 @@ public class CleanUpScreen extends WindowScreen {
         table.add(theme.label("Everything:")).widget().color = new Color(255, 0, 0);
         table.add(removeAll).widget();
         table.row();
+        table.add(theme.label("Duplicates:"));
+        table.add(removeDuplicates).widget();
+        table.row();
         table.add(theme.label("Rename all Servers:"));
         table.add(rename).widget();
         table.row();
@@ -60,16 +70,16 @@ public class CleanUpScreen extends WindowScreen {
     }
 
     private void cleanUp() {
-        for(int i = multiplayerScreen.getServerList().size() - 1; i >= 0; i--) {
-            ServerInfo server = multiplayerScreen.getServerList().get(i);
-
-            if(removeAll.checked || shouldRemove(server))
-                multiplayerScreen.getServerList().remove(server);
+        Set<String> knownIPs = new HashSet<>();
+        List<ServerInfo> servers = ((ServerListAccessor) multiplayerScreen.getServerList()).getServers();
+        for (ServerInfo server : servers.toArray(ServerInfo[]::new)) {
+            if (removeAll.checked || shouldRemove(server, knownIPs))
+                servers.remove(server);
         }
 
         if(rename.checked)
-            for(int i = 0; i < multiplayerScreen.getServerList().size(); i++) {
-                ServerInfo server = multiplayerScreen.getServerList().get(i);
+            for(int i = 0; i < servers.size(); i++) {
+                ServerInfo server = servers.get(i);
                 server.name = "Server discovery " + (i + 1);
             }
 
@@ -77,31 +87,16 @@ public class CleanUpScreen extends WindowScreen {
         client.setScreen(parent);
     }
 
-    private boolean shouldRemove(ServerInfo server) {
-        if(server == null)
-            return false;
-
-        if(removeUnknown.checked && isUnknownHost(server))
-            return true;
-
-        if(removeOutdated.checked && !isSameProtocol(server))
-            return true;
-
-        if(removeFailed.checked && isFailedPing(server))
-            return true;
-
-        if(removeGriefMe.checked && isGriefMeServer(server))
-            return true;
-
-        return false;
+    private boolean shouldRemove(ServerInfo server, Set<String> knownIPs) {
+        return server != null && (removeUnknown.checked && isUnknownHost(server)
+                || removeOutdated.checked && !isSameProtocol(server)
+                || removeFailed.checked && isFailedPing(server)
+                || removeGriefMe.checked && isGriefMeServer(server)
+                || removeDuplicates.checked && !knownIPs.add(server.address));
     }
 
     private boolean isUnknownHost(ServerInfo server) {
-        if(server.label == null)
-            return false;
-
-        if(server.label.getString() == null)
-            return false;
+        if (server.label == null || server.label.getString() == null) return false;
 
         return server.label.getString().equals("\u00a74Can't resolve hostname");
     }
