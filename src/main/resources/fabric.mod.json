@@ -21,9 +21,10 @@
     "MeteorAdditions.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.11.2",
+    "java": ">=17",
+    "fabricloader": ">=0.12.12",
     "fabric": "*",
-    "minecraft": ">=@mc_version@",
+    "minecraft": ">=1.18",
     "meteor-client": "*"
   },
   "custom": {
