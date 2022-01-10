@@ -153,7 +153,7 @@ public class AutoExtinguish extends Module {
             if (center.get()) {
                 PlayerUtils.centerPlayer();
             }
-            mc.player.getInventory().selectedSlot = slot.getSlot();
+            mc.player.getInventory().selectedSlot = slot.slot();
             float yaw = mc.gameRenderer.getCamera().getYaw() % 360;
             float pitch = mc.gameRenderer.getCamera().getPitch() % 360;
 
