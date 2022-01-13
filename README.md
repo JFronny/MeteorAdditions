@@ -8,8 +8,9 @@ MeteorAdditions provides the following features:
 - "Servers" option in the multiplayer menu:
   - Server discovery (discover new servers based on another IP of a hosting provider)
   - Clean up (remove outdated servers or ones that no longer exist)
+  - Easy saving/loading of servers between instances
 - AutoExtinguish
 - "Spawn Items" module to create a lot of item entities in creative
-- "give" command: recreates the functionality of several wurst modules used to create OP items in one command
+- Creative tab with several OP items partially taken from wurst modules
 
 [My fork](https://github.com/JFronny/meteor-client) of the Meteor Client contains other features for which meteor code needed to be modified
