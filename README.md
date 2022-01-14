@@ -11,6 +11,6 @@ MeteorAdditions provides the following features:
   - Easy saving/loading of servers between instances
 - AutoExtinguish
 - "Spawn Items" module to create a lot of item entities in creative
-- Creative tab with several OP items partially taken from wurst modules
+- Creative tab with several OP items partially taken from wurst modules (add items using the .save-item command or by editing .minecraft/meteor-client/additions_items.txt)
 
 [My fork](https://github.com/JFronny/meteor-client) of the Meteor Client contains other features for which meteor code needed to be modified

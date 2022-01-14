@@ -1,10 +1,12 @@
 package io.gitlab.jfronny.meteoradditions;
 
 import io.gitlab.jfronny.meteoradditions.modules.AdditionsItemGroup;
+import io.gitlab.jfronny.meteoradditions.modules.AdditionsItemGroupCommand;
 import io.gitlab.jfronny.meteoradditions.modules.AutoExtinguish;
 import io.gitlab.jfronny.meteoradditions.modules.SpawnItems;
 import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
+import meteordevelopment.meteorclient.systems.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemGroup;
@@ -20,7 +22,7 @@ public class MeteorAdditions extends MeteorAddon {
     public static final Logger LOG = LogManager.getLogger();
     public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.create(new Identifier("meteor-additions", "general"))
             .icon(() -> new ItemStack(Items.TNT))
-            .appendItems(AdditionsItemGroup::add)
+            .appendItems(AdditionsItemGroup::register)
             .build();
 
     @Override
@@ -30,5 +32,6 @@ public class MeteorAdditions extends MeteorAddon {
         Modules reg = Modules.get();
         reg.add(new SpawnItems());
         reg.add(new AutoExtinguish());
+        Commands.get().add(new AdditionsItemGroupCommand());
     }
 }
