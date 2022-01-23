@@ -1,9 +1,6 @@
 package io.gitlab.jfronny.meteoradditions;
 
-import io.gitlab.jfronny.meteoradditions.modules.AdditionsItemGroup;
-import io.gitlab.jfronny.meteoradditions.modules.AdditionsItemGroupCommand;
-import io.gitlab.jfronny.meteoradditions.modules.AutoExtinguish;
-import io.gitlab.jfronny.meteoradditions.modules.SpawnItems;
+import io.gitlab.jfronny.meteoradditions.modules.*;
 import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.systems.commands.Commands;
@@ -30,8 +27,9 @@ public class MeteorAdditions extends MeteorAddon {
         MeteorClient.EVENT_BUS.registerLambdaFactory("io.gitlab.jfronny.meteoradditions", (lookupInMethod, klass) -> (MethodHandles.Lookup) lookupInMethod.invoke(null, klass, MethodHandles.lookup()));
 
         Modules reg = Modules.get();
-        reg.add(new SpawnItems());
         reg.add(new AutoExtinguish());
+        reg.add(new AutoSpectre());
+        reg.add(new SpawnItems());
         Commands.get().add(new AdditionsItemGroupCommand());
     }
 }
