@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT'
+    id 'fabric-loom' version '0.11-SNAPSHOT'
 }
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
@@ -18,7 +18,12 @@ repositories {
         url = "https://maven.meteordev.org/snapshots"
     }
     maven { url "https://maven.terraformersmc.com/" }
-    jcenter()
+    maven {
+        url 'https://gitlab.com/api/v4/projects/32473285/packages/maven' // google-chat
+    }
+    maven {
+        url 'https://gitlab.com/api/v4/projects/25805200/packages/maven' // libjf
+    }
 }
 
 dependencies {
@@ -30,6 +35,11 @@ dependencies {
 
     modImplementation "meteordevelopment:meteor-client:${project.meteor_version}"
     modImplementation "com.terraformersmc:modmenu:3.0.1"
+
+    include modImplementation('io.gitlab.jfronny:googlechat:+')
+    include modImplementation("io.gitlab.jfronny.libjf:libjf-config-v0:${project.jfapi_version}")
+    include("io.gitlab.jfronny.libjf:libjf-unsafe-v0:${project.jfapi_version}")
+    include("io.gitlab.jfronny.libjf:libjf-base:${project.jfapi_version}")
 }
 
 processResources {

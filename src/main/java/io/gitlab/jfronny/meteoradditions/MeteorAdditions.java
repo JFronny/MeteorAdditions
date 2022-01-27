@@ -10,14 +10,15 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 
 public class MeteorAdditions extends MeteorAddon {
-    public static final Logger LOG = LogManager.getLogger();
-    public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.create(new Identifier("meteor-additions", "general"))
+    public static final String MOD_ID = "meteor-additions";
+    public static final Logger LOG = LoggerFactory.getLogger(MOD_ID);
+    public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "general"))
             .icon(() -> new ItemStack(Items.TNT))
             .appendItems(AdditionsItemGroup::register)
             .build();
@@ -30,6 +31,7 @@ public class MeteorAdditions extends MeteorAddon {
         reg.add(new AutoExtinguish());
         reg.add(new AutoSpectre());
         reg.add(new SpawnItems());
+        reg.add(new TranslaterModule());
         Commands.get().add(new AdditionsItemGroupCommand());
     }
 }
