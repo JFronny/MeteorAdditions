@@ -18,12 +18,21 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: current
+        arguments: build
     - name: Upload build artifacts
       uses: actions/upload-artifact@v1
       with:
         name: build-artifacts
         path: build/libs
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest-1.18"
+        prerelease: false
+        title: "1.18 Build"
+        files: |
+          ./build/libs/*.jar

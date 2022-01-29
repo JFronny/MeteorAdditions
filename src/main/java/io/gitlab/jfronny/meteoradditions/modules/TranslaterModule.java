@@ -1,7 +1,7 @@
 package io.gitlab.jfronny.meteoradditions.modules;
 
 import io.gitlab.jfronny.googlechat.GoogleChatConfig;
-import io.gitlab.jfronny.googlechat.api.Language;
+import io.gitlab.jfronny.libjf.translate.Language;
 import meteordevelopment.meteorclient.settings.EnumSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
@@ -15,7 +15,7 @@ public class TranslaterModule extends Module {
             .name("server-language")
             .description("The language of the server used in translations. Auto-detect will disable translating your own messages")
             .defaultValue(Language.AUTO_DETECT)
-            .onChanged(language -> GoogleChatConfig.serverLanguage = language.value)
+            .onChanged(language -> GoogleChatConfig.serverLanguage = language.id)
             .build()
     );
 
@@ -23,7 +23,7 @@ public class TranslaterModule extends Module {
             .name("client-language")
             .description("Your own language used in translations. Auto-detect will disable translating messages by other server members")
             .defaultValue(Language.ENGLISH)
-            .onChanged(language -> GoogleChatConfig.clientLanguage = language.value)
+            .onChanged(language -> GoogleChatConfig.clientLanguage = language.id)
             .build()
     );
 
