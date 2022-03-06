@@ -27,20 +27,20 @@ repositories {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.minecraft_version}+${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    minecraft "com.mojang:minecraft:$project.minecraft_version"
+    mappings "net.fabricmc:yarn:$project.minecraft_version+$project.yarn_mappings:v2"
+    modImplementation "net.fabricmc:fabric-loader:$project.loader_version"
 
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$project.fabric_version"
 
-    modImplementation "meteordevelopment:meteor-client:${project.meteor_version}"
-    modImplementation "com.terraformersmc:modmenu:3.0.1"
+    modImplementation "meteordevelopment:meteor-client:$project.meteor_version"
+    modImplementation "com.terraformersmc:modmenu:$modmenu_version"
 
-    include modImplementation('io.gitlab.jfronny:googlechat:0.1.0')
-    include modImplementation("io.gitlab.jfronny.libjf:libjf-config-v0:${project.jfapi_version}")
-    include modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v0:${project.jfapi_version}")
-    include("io.gitlab.jfronny.libjf:libjf-unsafe-v0:${project.jfapi_version}")
-    include("io.gitlab.jfronny.libjf:libjf-base:${project.jfapi_version}")
+    include modImplementation("io.gitlab.jfronny:googlechat:$project.googlechat_version")
+    include modImplementation("io.gitlab.jfronny.libjf:libjf-config-v0:$project.jfapi_version")
+    include modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v1:$project.jfapi_version")
+    include("io.gitlab.jfronny.libjf:libjf-unsafe-v0:$project.jfapi_version")
+    include("io.gitlab.jfronny.libjf:libjf-base:$project.jfapi_version")
 }
 
 processResources {

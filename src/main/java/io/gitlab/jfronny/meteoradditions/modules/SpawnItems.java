@@ -10,8 +10,10 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import meteordevelopment.meteorclient.utils.player.InvUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 
 import java.util.Random;
 
@@ -57,9 +59,7 @@ public class SpawnItems extends Module {
         int stacks = speed.get();
         int size = stackSize.get();
         for(int i = 9; i < 9 + stacks; i++) {
-            mc.player.networkHandler.sendPacket(
-                    new CreativeInventoryActionC2SPacket(i,
-                            new ItemStack(Registry.ITEM.getRandom(random), size)));
+            mc.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(i, new ItemStack(Registry.ITEM.getRandom(random).map(RegistryEntry::value).orElse(Items.DIRT), size)));
         }
 
         for(int i = 9; i < 9 + stacks; i++) {

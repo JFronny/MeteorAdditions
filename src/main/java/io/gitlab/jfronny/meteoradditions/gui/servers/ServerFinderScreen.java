@@ -212,9 +212,9 @@ public class ServerFinderScreen extends WindowScreen implements IServerFinderDon
     }
 
     @Override
-    public void onClose() {
+    public void close() {
         state = ServerFinderState.CANCELLED;
-        super.onClose();
+        super.close();
     }
 
     public enum ServerFinderState {

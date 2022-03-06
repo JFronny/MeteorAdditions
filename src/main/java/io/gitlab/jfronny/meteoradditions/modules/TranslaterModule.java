@@ -1,7 +1,7 @@
 package io.gitlab.jfronny.meteoradditions.modules;
 
 import io.gitlab.jfronny.googlechat.GoogleChatConfig;
-import io.gitlab.jfronny.libjf.translate.Language;
+import io.gitlab.jfronny.libjf.translate.impl.google.Language;
 import meteordevelopment.meteorclient.settings.EnumSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
