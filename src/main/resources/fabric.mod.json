@@ -7,7 +7,7 @@
   "authors": ["JFronny"],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/MeteorAdditions/icon.png",
+  "icon": "assets/meteor-additions/icon.png",
   "environment": "client",
   "entrypoints": {
     "meteor": [
@@ -31,6 +31,6 @@
     "modmenu": {
       "parent": "meteor-client"
     },
-    "meteor-client:color": "153,0,153"
+    "meteor-client:color": "0,149,0"
   }
 }
