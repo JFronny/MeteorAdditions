@@ -31,6 +31,7 @@
     "modmenu": {
       "parent": "meteor-client"
     },
-    "meteor-client:color": "0,149,0"
+    "meteor-client:color": "0,149,0",
+    "github:sha": "@gh_hash@"
   }
 }

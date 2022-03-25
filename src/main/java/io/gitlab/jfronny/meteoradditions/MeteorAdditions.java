@@ -2,10 +2,12 @@ package io.gitlab.jfronny.meteoradditions;
 
 import io.gitlab.jfronny.meteoradditions.modules.*;
 import meteordevelopment.meteorclient.MeteorClient;
+import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.systems.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -33,5 +35,21 @@ public class MeteorAdditions extends MeteorAddon {
         reg.add(new SpawnItems());
         reg.add(new TranslaterModule());
         Commands.get().add(new AdditionsItemGroupCommand());
+    }
+
+    @Override
+    public String getWebsite() {
+        return "https://github.com/JFronny/MeteorAdditions";
+    }
+
+    @Override
+    public GithubRepo getRepo() {
+        return new GithubRepo("JFronny", "MeteorAdditions");
+    }
+
+    @Override
+    public String getCommit() {
+        String commit = FabricLoader.getInstance().getModContainer(MOD_ID).get().getMetadata().getCustomValue("github:sha").getAsString();
+        return commit.isEmpty() ? null : commit;
     }
 }

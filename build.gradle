@@ -46,6 +46,9 @@ dependencies {
 processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version
+
+        filter { line -> line.replace("@mc_version@", project.minecraft_version) }
+        filter { line -> line.replace("@gh_hash@", System.getenv("GITHUB_SHA") ?: "") }
     }
 }
 
