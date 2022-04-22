@@ -1,9 +1,12 @@
 {
   "itemGroup.meteor-additions.general": "MeteorAdditions",
+  "meteor-additions.error": "Something went wrong",
   "meteor-additions.saved-ip": "Saved %s new IP",
   "meteor-additions.saved-ips": "Saved %s new IPs",
   "meteor-additions.saved-ip-success": "Success!",
+  "meteor-additions.saved-ip-failed": "The IPs could not be saved, look at the log for details",
   "meteor-additions.loaded-ip": "Loaded %s new IP",
   "meteor-additions.loaded-ips": "Loaded %s new IPs",
-  "meteor-additions.loaded-ip-success": "Success!"
+  "meteor-additions.loaded-ip-success": "Success!",
+  "meteor-additions.loaded-ip-failed": "The IPs could not be loaded, look at the log for details"
 }
