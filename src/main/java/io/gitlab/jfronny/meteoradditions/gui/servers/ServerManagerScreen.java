@@ -1,6 +1,6 @@
 package io.gitlab.jfronny.meteoradditions.gui.servers;
 
-import io.gitlab.jfronny.libjf.generic.Try;
+import io.gitlab.jfronny.commons.throwable.Try;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import io.gitlab.jfronny.meteoradditions.mixin.MultiplayerScreenAccessor;
 import io.gitlab.jfronny.meteoradditions.mixin.ServerListAccessor;
@@ -18,6 +18,7 @@ import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.ServerList;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Util;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.MemoryUtil;
@@ -125,6 +126,9 @@ public class ServerManagerScreen extends WindowScreen {
             MeteorAdditions.LOG.error("Could not load IPs", e);
             toast("meteor-additions.error", "meteor-additions.loaded-ip-failed");
         });
+        l.add(theme.button("Mass scan")).expandX().widget().action = () -> {
+            Util.getOperatingSystem().open("https://github.com/JFronny/MeteorAdditions/tree/master/masscan");
+        };
     }
 
     private void toast(String titleKey, String descriptionKey, Object... params) {
