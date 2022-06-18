@@ -161,7 +161,7 @@ public class LegacyServerFinderScreen extends WindowScreen {
                     if(!isServerInList(pingers.get(i).getServerIP())) {
                         multiplayerScreen.getServerList()
                                 .add(new ServerInfo("Server discovery " + working,
-                                        pingers.get(i).getServerIP(), false));
+                                        pingers.get(i).getServerIP(), false), false);
                         multiplayerScreen.getServerList().saveFile();
                         ((MultiplayerScreenAccessor)multiplayerScreen).getServerListWidget()
                                 .setSelected(null);

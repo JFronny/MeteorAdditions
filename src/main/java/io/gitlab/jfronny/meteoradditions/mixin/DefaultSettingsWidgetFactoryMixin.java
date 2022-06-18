@@ -17,13 +17,13 @@ import java.util.Map;
 
 @Mixin(DefaultSettingsWidgetFactory.class)
 public abstract class DefaultSettingsWidgetFactoryMixin implements IDefaultSettingsWidgetFactory {
-    @Shadow @Final private Map<Class<?>, Object> factories;
+    @Shadow(remap = false) @Final private Map<Class<?>, Object> factories;
 
-    @Shadow @Final private GuiTheme theme;
+    @Shadow(remap = false) @Final private GuiTheme theme;
 
-    @Shadow protected abstract void reset(WContainer c, Setting<?> setting, Runnable action);
+    @Shadow(remap = false) protected abstract void reset(WContainer c, Setting<?> setting, Runnable action);
 
-    @Inject(at = @At("TAIL"), method = "<init>(Lmeteordevelopment/meteorclient/gui/GuiTheme;)V")
+    @Inject(at = @At("TAIL"), method = "<init>(Lmeteordevelopment/meteorclient/gui/GuiTheme;)V", remap = false)
     private void addCustomFactories(GuiTheme theme, CallbackInfo ci) {
         DefaultSettingsWidgetFactoryProxy.injectFactories(this);
     }

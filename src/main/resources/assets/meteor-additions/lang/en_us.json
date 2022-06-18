@@ -8,5 +8,6 @@
   "meteor-additions.loaded-ip": "Loaded %s new IP",
   "meteor-additions.loaded-ips": "Loaded %s new IPs",
   "meteor-additions.loaded-ip-success": "Success!",
-  "meteor-additions.loaded-ip-failed": "The IPs could not be loaded, look at the log for details"
+  "meteor-additions.loaded-ip-failed": "The IPs could not be loaded, look at the log for details",
+  "meteor-additions.servers.button": "Servers"
 }

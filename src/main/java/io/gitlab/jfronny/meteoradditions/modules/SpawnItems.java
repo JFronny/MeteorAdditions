@@ -12,10 +12,9 @@ import meteordevelopment.meteorclient.utils.player.InvUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
-
-import java.util.Random;
 
 public class SpawnItems extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -39,7 +38,7 @@ public class SpawnItems extends Module {
             .build()
     );
 
-    private final Random random = new Random();
+    private final Random random = Random.create();
 
     public SpawnItems() {
         super(Categories.Misc, "spawn-items", "Spawns a lot of unwanted items");

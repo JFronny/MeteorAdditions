@@ -19,9 +19,7 @@ import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
 import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.server.ServerMetadata;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import org.apache.commons.lang3.ArrayUtils;
@@ -86,12 +84,12 @@ public class ServerListPinger {
 
             public void onResponse(QueryResponseS2CPacket packet) {
                 if (this.received) {
-                    clientConnection.disconnect(new TranslatableText("multiplayer.status.unrequested"));
+                    clientConnection.disconnect(Text.translatable("multiplayer.status.unrequested"));
                 } else {
                     this.received = true;
                     ServerMetadata serverMetadata = packet.getServerMetadata();
                     if (serverMetadata.getDescription() != null) {
-                        entry.label = serverMetadata.getDescription().asString();
+                        entry.label = serverMetadata.getDescription().getString();
                     } else {
                         entry.label = "";
                     }
@@ -113,11 +111,11 @@ public class ServerListPinger {
                             GameProfile[] var4 = serverMetadata.getPlayers().getSample();
 
                             for (GameProfile gameProfile : var4) {
-                                list.add(new LiteralText(gameProfile.getName()));
+                                list.add(Text.literal(gameProfile.getName()));
                             }
 
                             if (serverMetadata.getPlayers().getSample().length < serverMetadata.getPlayers().getOnlinePlayerCount()) {
-                                list.add(new TranslatableText("multiplayer.status.and_more", serverMetadata.getPlayers().getOnlinePlayerCount() - serverMetadata.getPlayers().getSample().length));
+                                list.add(Text.translatable("multiplayer.status.and_more", serverMetadata.getPlayers().getOnlinePlayerCount() - serverMetadata.getPlayers().getSample().length));
                             }
 
                             entry.playerListSummary = list;
@@ -152,7 +150,7 @@ public class ServerListPinger {
                 long l = this.startTime;
                 long m = Util.getMeasuringTimeMs();
                 entry.ping = m - l;
-                clientConnection.disconnect(new TranslatableText("multiplayer.status.finished"));
+                clientConnection.disconnect(Text.translatable("multiplayer.status.finished"));
             }
 
             public void onDisconnected(Text reason) {
@@ -285,7 +283,7 @@ public class ServerListPinger {
                 ClientConnection clientConnection = iterator.next();
                 if (clientConnection.isOpen()) {
                     iterator.remove();
-                    clientConnection.disconnect(new TranslatableText("multiplayer.status.cancelled"));
+                    clientConnection.disconnect(Text.translatable("multiplayer.status.cancelled"));
                 }
             }
         }

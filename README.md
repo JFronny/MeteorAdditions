@@ -9,7 +9,6 @@ MeteorAdditions provides the following features:
   - Server discovery (discover new servers based on another IP of a hosting provider)
   - Clean up (remove outdated servers or ones that no longer exist)
   - Easy saving/loading of servers between instances
-- AutoExtinguish
 - "Spawn Items" module to create a lot of item entities in creative
 - Creative tab with several OP items partially taken from wurst modules (add items using the .save-item command or by editing .minecraft/meteor-client/additions_items.txt)
 - AutoSpectre based on [#1932](https://github.com/MeteorDevelopment/meteor-client/pull/1932)

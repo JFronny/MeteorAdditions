@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
@@ -42,7 +42,7 @@ public class CustomItemStringReader {
                         default -> throw new ItemSyntaxException("Could not resolve special NBT: " + special);
                     }
                 }
-                case '#' -> stack.setCustomName(new LiteralText(readStringLiteral(reader)));
+                case '#' -> stack.setCustomName(Text.literal(readStringLiteral(reader)));
                 case '$' -> stack.setCount(readInt(reader));
             }
         }

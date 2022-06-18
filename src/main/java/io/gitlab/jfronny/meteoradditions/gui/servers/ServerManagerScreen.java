@@ -17,7 +17,7 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.ServerList;
 import net.minecraft.client.toast.SystemToast;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.*;
 import net.minecraft.util.Util;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
@@ -132,7 +132,7 @@ public class ServerManagerScreen extends WindowScreen {
     }
 
     private void toast(String titleKey, String descriptionKey, Object... params) {
-        SystemToast.add(client.getToastManager(), SystemToast.Type.WORLD_BACKUP, new TranslatableText(titleKey), new TranslatableText(descriptionKey, params));
+        SystemToast.add(client.getToastManager(), SystemToast.Type.WORLD_BACKUP, Text.translatable(titleKey), Text.translatable(descriptionKey, params));
     }
 
     private void addButton(WContainer c, String text, IGetter<Screen> action) {

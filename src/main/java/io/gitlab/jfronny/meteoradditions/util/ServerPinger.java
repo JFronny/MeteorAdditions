@@ -62,7 +62,7 @@ public class ServerPinger implements IServerFinderDoneListener, IServerFinderDis
 
         pingIP = ip;
         pingPort = port;
-        server = new MServerInfo("", ip + ":" + port, false);
+        server = new MServerInfo("", ip + ":" + port);
         server.version = null;
 
         if (scanPorts) {
