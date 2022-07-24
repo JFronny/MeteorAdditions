@@ -22,9 +22,9 @@
   ],
   "depends": {
     "java": ">=17",
-    "fabricloader": ">=0.12.12",
+    "fabricloader": ">=0.14.8",
     "fabric": "*",
-    "minecraft": ">=1.18",
+    "minecraft": ">=${mc_version}",
     "meteor-client": "*"
   },
   "custom": {
@@ -32,6 +32,6 @@
       "parent": "meteor-client"
     },
     "meteor-client:color": "0,149,0",
-    "github:sha": "@gh_hash@"
+    "github:sha": "${gh_hash}"
   }
 }

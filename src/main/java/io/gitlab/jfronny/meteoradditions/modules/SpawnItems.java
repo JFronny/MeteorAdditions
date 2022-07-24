@@ -7,7 +7,6 @@ import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.modules.Categories;
 import meteordevelopment.meteorclient.systems.modules.Module;
-import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import meteordevelopment.meteorclient.utils.player.InvUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -46,9 +45,8 @@ public class SpawnItems extends Module {
 
     @Override
     public void onActivate() {
-        if(!mc.player.getAbilities().creativeMode)
-        {
-            ChatUtils.error("Creative mode only.");
+        if(!mc.player.getAbilities().creativeMode) {
+            error("Creative mode only.");
             this.toggle();
         }
     }
