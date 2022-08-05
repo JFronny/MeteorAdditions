@@ -32,7 +32,7 @@ public class MeteorAdditions extends MeteorAddon {
         Modules reg = Modules.get();
         reg.add( new AutoSpectre() );
         reg.add( new SpawnItems() );
-        reg.add( new TranslaterModule() );
+        reg.add( new TranslatorModule() );
         Commands.get().add( new AdditionsItemGroupCommand() );
 
         // Features: (for parsing by anticope.ml)
@@ -41,7 +41,7 @@ public class MeteorAdditions extends MeteorAddon {
         // add(new "Spawn Items" module to create a lot of item entities in creative())
         // add(new Configurable Creative tab with several OP items, see README())
         // add(new AutoSpectre based on PR 1932())
-        // add(new Translater module for chat translations())
+        // add(new Translator module for chat translations())
     }
 
     @Override

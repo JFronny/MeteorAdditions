@@ -12,6 +12,6 @@ MeteorAdditions provides the following features:
 - "Spawn Items" module to create a lot of item entities in creative
 - Creative tab with several OP items partially taken from wurst modules (add items using the .save-item command or by editing .minecraft/meteor-client/additions_items.txt)
 - AutoSpectre based on [#1932](https://github.com/MeteorDevelopment/meteor-client/pull/1932)
-- Translater module to configure my [google-chat mod](https://gitlab.com/jfmods/googlechat) (google-chat is included in MeteorAdditions)
+- Translator module to configure my [google-chat mod](https://gitlab.com/jfmods/googlechat) (google-chat is included in MeteorAdditions)
 
 [My fork](https://github.com/JFronny/meteor-client) of the Meteor Client contains other features for which meteor code needed to be modified

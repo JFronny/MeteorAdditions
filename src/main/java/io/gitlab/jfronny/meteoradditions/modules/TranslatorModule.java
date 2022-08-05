@@ -9,7 +9,7 @@ import meteordevelopment.meteorclient.systems.modules.Categories;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import net.minecraft.client.resource.language.*;
 
-public class TranslaterModule extends Module {
+public class TranslatorModule extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<?> serverLanguage = sgGeneral.add(Coerce.pinF(GoogleChat.TRANSLATE_SERVICE, svc -> new LanguageSetting.Builder<>(svc)
@@ -44,7 +44,7 @@ public class TranslaterModule extends Module {
             .build()
     );
 
-    public TranslaterModule() {
+    public TranslatorModule() {
         super(Categories.Misc, "translater", "Automatically translates chat messages");
         GoogleChatConfig.enabled = isActive();
         ((Setting<Object>)serverLanguage).set(GoogleChat.TRANSLATE_SERVICE.parseLang(GoogleChatConfig.serverLanguage));
