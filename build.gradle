@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.12-SNAPSHOT'
+    id 'fabric-loom' version '1.0-SNAPSHOT'
 }
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
@@ -24,13 +24,13 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:$project.fabric_version"
 
     modImplementation "meteordevelopment:meteor-client:$project.meteor_version"
-    modImplementation "com.terraformersmc:modmenu:$modmenu_version"
+    modImplementation "com.terraformersmc:modmenu:$project.modmenu_version"
 
-    include modImplementation("io.gitlab.jfronny:googlechat:$project.googlechat_version")
-    include modImplementation("io.gitlab.jfronny.libjf:libjf-config-v0:$project.jfapi_version")
-    include modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v1:$project.jfapi_version")
-    include("io.gitlab.jfronny.libjf:libjf-unsafe-v0:$project.jfapi_version")
-    include("io.gitlab.jfronny.libjf:libjf-base:$project.jfapi_version")
+    include modImplementation("io.gitlab.jfronny:google-chat:$project.googlechat_version")
+    include modImplementation("io.gitlab.jfronny.libjf:libjf-config-core-v1:$project.libjf_version")
+    include modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v1:$project.libjf_version")
+    include("io.gitlab.jfronny.libjf:libjf-unsafe-v0:$project.libjf_version")
+    include("io.gitlab.jfronny.libjf:libjf-base:$project.libjf_version")
 }
 
 processResources {
