@@ -32,7 +32,6 @@ public class MeteorAdditions extends MeteorAddon {
         Modules reg = Modules.get();
         reg.add( new AutoSpectre() );
         reg.add( new SpawnItems() );
-        reg.add( new TranslatorModule() );
         Commands.get().add( new AdditionsItemGroupCommand() );
 
         // Features: (for parsing by anticope.ml)

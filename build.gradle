@@ -12,7 +12,6 @@ repositories {
     maven { url "https://maven.meteordev.org/releases" }
     maven { url "https://maven.meteordev.org/snapshots" }
     maven { url "https://maven.terraformersmc.com/" }
-    maven { url "https://gitlab.com/api/v4/projects/32473285/packages/maven" } // google-chat
     maven { url "https://gitlab.com/api/v4/projects/25805200/packages/maven" } // libjf
 }
 
@@ -26,10 +25,7 @@ dependencies {
     modImplementation "meteordevelopment:meteor-client:$project.meteor_version"
     modImplementation "com.terraformersmc:modmenu:$project.modmenu_version"
 
-    include modImplementation("io.gitlab.jfronny:google-chat:$project.googlechat_version")
     include modImplementation("io.gitlab.jfronny.libjf:libjf-config-core-v1:$project.libjf_version")
-    include modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v1:$project.libjf_version")
-    include("io.gitlab.jfronny.libjf:libjf-unsafe-v0:$project.libjf_version")
     include("io.gitlab.jfronny.libjf:libjf-base:$project.libjf_version")
 }
 
