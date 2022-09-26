@@ -29,7 +29,6 @@ dependencies {
     include modImplementation("io.gitlab.jfronny:google-chat:$project.googlechat_version")
     include modImplementation("io.gitlab.jfronny.libjf:libjf-config-core-v1:$project.libjf_version")
     include modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v1:$project.libjf_version")
-    include("io.gitlab.jfronny.libjf:libjf-unsafe-v0:$project.libjf_version")
     include("io.gitlab.jfronny.libjf:libjf-base:$project.libjf_version")
 }
 
