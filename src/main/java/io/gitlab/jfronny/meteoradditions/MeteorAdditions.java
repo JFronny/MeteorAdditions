@@ -1,21 +1,22 @@
 package io.gitlab.jfronny.meteoradditions;
 
 import io.gitlab.jfronny.meteoradditions.modules.*;
-import meteordevelopment.meteorclient.MeteorClient;
+import io.gitlab.jfronny.meteoradditions.util.LanguageSetting;
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
+import meteordevelopment.meteorclient.gui.utils.SettingsWidgetFactory;
 import meteordevelopment.meteorclient.systems.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.CustomValue;
+import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 
 public class MeteorAdditions extends MeteorAddon {
     public static final String MOD_ID = "meteor-additions";
@@ -27,6 +28,8 @@ public class MeteorAdditions extends MeteorAddon {
 
     @Override
     public void onInitialize() {
+        SettingsWidgetFactory.registerCustomFactory(LanguageSetting.class, LanguageSetting::widget);
+
         // The formatting here is intentionally weird to not meet the regex filter used by anticope.ml
         // Since the feature list is generated from this file, we abuse the filter through comments instead.
         Modules reg = Modules.get();
@@ -61,7 +64,12 @@ public class MeteorAdditions extends MeteorAddon {
 
     @Override
     public String getCommit() {
-        String commit = FabricLoader.getInstance().getModContainer(MOD_ID).get().getMetadata().getCustomValue("github:sha").getAsString();
-        return commit.isEmpty() ? null : commit;
+        return FabricLoader.getInstance()
+                .getModContainer(MOD_ID)
+                .map(ModContainer::getMetadata)
+                .map(s -> s.getCustomValue("github:sha"))
+                .map(CustomValue::getAsString)
+                .flatMap(s -> s.isEmpty() ? Optional.empty() : Optional.of(s))
+                .orElse(null);
     }
 }

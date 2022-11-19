@@ -2,13 +2,17 @@ package io.gitlab.jfronny.meteoradditions.util;
 
 import io.gitlab.jfronny.libjf.translate.api.Language;
 import io.gitlab.jfronny.libjf.translate.api.TranslateService;
+import meteordevelopment.meteorclient.gui.GuiTheme;
+import meteordevelopment.meteorclient.gui.renderer.GuiRenderer;
+import meteordevelopment.meteorclient.gui.utils.SettingsWidgetFactory;
+import meteordevelopment.meteorclient.gui.widgets.containers.WTable;
+import meteordevelopment.meteorclient.gui.widgets.input.WDropdown;
 import meteordevelopment.meteorclient.settings.IVisible;
 import meteordevelopment.meteorclient.settings.Setting;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LanguageSetting<TService extends TranslateService<TLang>, TLang extends Language> extends Setting<TLang> {
@@ -18,7 +22,7 @@ public class LanguageSetting<TService extends TranslateService<TLang>, TLang ext
     public LanguageSetting(String name, String description, TLang defaultValue, Consumer<TLang> onChanged, Consumer<Setting<TLang>> onModuleActivated, IVisible visible, TService service) {
         super(name, description, defaultValue, onChanged, onModuleActivated, visible);
         values = service.getAvailableLanguages();
-        suggestions = Stream.concat(values.stream().map(Language::getIdentifier), values.stream().map(Language::getDisplayName)).collect(Collectors.toList());
+        suggestions = Stream.concat(values.stream().map(Language::getIdentifier), values.stream().map(Language::getDisplayName)).toList();
     }
 
     @Override
@@ -71,5 +75,20 @@ public class LanguageSetting<TService extends TranslateService<TLang>, TLang ext
         public LanguageSetting<TService, TLang> build() {
             return new LanguageSetting<>(name, description, defaultValue, onChanged, onModuleActivated, visible, service);
         }
+    }
+
+    public static SettingsWidgetFactory.Factory widget(GuiTheme theme) {
+        return (table, setting) -> widget(theme, table, (LanguageSetting<?, ?>) setting);
+    }
+
+    private static <TService extends TranslateService<TLang>, TLang extends Language> void widget(GuiTheme theme, WTable table, LanguageSetting<TService, TLang> setting) {
+        WDropdown<Object> dropdown = table.add(theme.dropdown(setting.getValues(), setting.get())).expandCellX().widget();
+        dropdown.action = () -> setting.set((TLang)dropdown.get());
+
+        // Reset button
+        table.add(theme.button(GuiRenderer.RESET)).widget().action = () -> {
+            setting.reset();
+            dropdown.set(setting.get());
+        };
     }
 }

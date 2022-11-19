@@ -22,7 +22,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: current
-        arguments: build
+        arguments: build -Porg.gradle.jvmargs=-Xmx2G
     - name: Upload build artifacts
       uses: actions/upload-artifact@v1
       with:
