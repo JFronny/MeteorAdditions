@@ -23,7 +23,7 @@
   "depends": {
     "java": ">=17",
     "fabricloader": ">=0.14.8",
-    "fabric": "*",
+    "fabric-api": "*",
     "minecraft": ">=${mc_version}",
     "meteor-client": "*"
   },
