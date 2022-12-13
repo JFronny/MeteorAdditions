@@ -19,8 +19,11 @@ public abstract class MultiplayerScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo info) {
-        addDrawableChild(new ButtonWidget(this.width - 75 - 3 - 75 - 2 - 75 - 2, 3, 75, 20, Text.translatable("meteor-additions.servers.button"), button -> {
-            client.setScreen(new ServerManagerScreen(GuiThemes.get(), (MultiplayerScreen) (Object) this));
-        }));
+        addDrawableChild(ButtonWidget.builder(Text.translatable("meteor-additions.servers.button"), button -> {
+                    client.setScreen(new ServerManagerScreen(GuiThemes.get(), (MultiplayerScreen) (Object) this));
+                })
+                .position(this.width - 75 - 3 - 75 - 2 - 75 - 2, 3)
+                .size(75, 20)
+                .build());
     }
 }

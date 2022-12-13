@@ -7,7 +7,7 @@ import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.gui.utils.SettingsWidgetFactory;
 import meteordevelopment.meteorclient.systems.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Modules;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
@@ -21,9 +21,9 @@ import java.util.Optional;
 public class MeteorAdditions extends MeteorAddon {
     public static final String MOD_ID = "meteor-additions";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_ID);
-    public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "general"))
+    public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder(new Identifier(MOD_ID, "general"))
             .icon(() -> new ItemStack(Items.TNT))
-            .appendItems(AdditionsItemGroup::register)
+            .entries(AdditionsItemGroup::register)
             .build();
 
     @Override

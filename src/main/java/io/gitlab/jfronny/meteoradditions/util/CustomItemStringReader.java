@@ -4,19 +4,17 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.nbt.*;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
-import net.minecraft.util.registry.Registry;
 
 public class CustomItemStringReader {
     public static ItemStack read(String desc) throws ItemSyntaxException {
         StringReader reader = new StringReader(desc);
         Identifier identifier = readIdentifier(reader);
-        Item item = Registry.ITEM.getOrEmpty(identifier).orElseThrow(() -> new ItemSyntaxException("Invalid item ID: " + identifier));
+        Item item = Registries.ITEM.getOrEmpty(identifier).orElseThrow(() -> new ItemSyntaxException("Invalid item ID: " + identifier));
         ItemStack stack = new ItemStack(item, 1);
         while (reader.canRead()) {
             switch (reader.read()) {

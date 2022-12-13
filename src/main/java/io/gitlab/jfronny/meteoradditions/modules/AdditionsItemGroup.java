@@ -3,8 +3,8 @@ package io.gitlab.jfronny.meteoradditions.modules;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import io.gitlab.jfronny.meteoradditions.util.CustomItemStringReader;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
+import net.minecraft.resource.featuretoggle.FeatureSet;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,13 +21,13 @@ public class AdditionsItemGroup {
             """;
     private static final Path LIST_FILE = FabricLoader.getInstance().getGameDir().resolve("meteor-client").resolve("additions_items.txt");
 
-    public static void register(List<ItemStack> stacksForDisplay) {
+    public static void register(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean operatorEnabled) {
         try {
             for (String s : read()) {
                 s = s.trim();
                 if (s.isEmpty()) continue;
                 try {
-                    stacksForDisplay.add(CustomItemStringReader.read(s));
+                    entries.add(CustomItemStringReader.read(s));
                 } catch (CustomItemStringReader.ItemSyntaxException e) {
                     MeteorAdditions.LOG.error("Could not parse item for additions group (\"" + s + "\")", e);
                 }
