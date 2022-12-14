@@ -1,13 +1,17 @@
 package io.gitlab.jfronny.meteoradditions.util;
 
+import io.gitlab.jfronny.googlechat.JFC_GoogleChatConfig;
 import io.gitlab.jfronny.libjf.config.api.v1.*;
 import io.gitlab.jfronny.libjf.config.api.v1.type.Type;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
-import meteordevelopment.meteorclient.gui.GuiTheme;
+import meteordevelopment.meteorclient.gui.*;
 import meteordevelopment.meteorclient.gui.renderer.GuiRenderer;
 import meteordevelopment.meteorclient.gui.widgets.WWidget;
 import meteordevelopment.meteorclient.gui.widgets.containers.*;
 import meteordevelopment.meteorclient.gui.widgets.input.*;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.resource.language.I18n;
 
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +32,20 @@ public class ShimUi {
         this.parent = Objects.requireNonNull(parent);
     }
 
+    public static class ShimUiScreen extends WindowScreen {
+        private final ConfigInstance config;
+
+        public ShimUiScreen(GuiTheme theme, ConfigInstance config) {
+            super(theme, translate(config.getTranslationPrefix() + "title"));
+            this.config = config;
+        }
+
+        @Override
+        public void initWidgets() {
+            generate(config, theme, window);
+        }
+    }
+
     public static void generate(ConfigInstance config, GuiTheme theme, WVerticalList target) {
         try {
             new ShimUi(theme, target, config).generate();
@@ -37,29 +55,43 @@ public class ShimUi {
     }
 
     private void generate() throws IllegalAccessException {
-        WSection presets = target.add(theme.section("meteor-additions.presets", false)).expandX().widget();
-        for (Map.Entry<String, Runnable> entry : parent.getPresets().entrySet()) {
-            presets.add(theme.button(parent.getTranslationPrefix() + entry.getKey())).widget().action = () -> {
-                entry.getValue().run();
-                target.clear();
-                try {
-                    generate();
-                } catch (IllegalAccessException e) {
-                    MeteorAdditions.LOG.error("Could not generate shim UI", e);
-                    target.add(theme.label("Could not generate"));
-                }
-            };
+        if (!parent.getPresets().isEmpty()) {
+            WSection presets = target.add(theme.section(translate("meteor-additions.presets"), false)).expandX().widget();
+            for (Map.Entry<String, Runnable> entry : parent.getPresets().entrySet()) {
+                presets.add(theme.button(translate(parent.getTranslationPrefix() + entry.getKey()))).widget().action = () -> {
+                    entry.getValue().run();
+                    target.clear();
+                    try {
+                        generate();
+                    } catch (IllegalAccessException e) {
+                        MeteorAdditions.LOG.error("Could not generate shim UI", e);
+                        target.add(theme.label("Could not generate"));
+                    }
+                };
+            }
         }
         for (var entry : parent.getCategories().entrySet()) {
-            WSection section = target.add(theme.section(entry.getValue().getTranslationPrefix() + "title", false)).expandX().widget();
+            WSection section = target.add(theme.section(translate(entry.getValue().getTranslationPrefix() + "title"), false)).expandX().widget();
             new ShimUi(theme, section, entry.getValue()).generate();
         }
         target.add(table).expandX();
         for (EntryInfo<?> entry : parent.getEntries()) entry(entry);
-        //TODO referenced configs
+        if (!parent.getReferencedConfigs().isEmpty()) {
+            WSection referenced = target.add(theme.section("meteor-additions.referenced", false)).expandX().widget();
+            for (ConfigInstance config : parent.getReferencedConfigs()) {
+                String name = translate(config.getTranslationPrefix() + "title");
+                referenced.add(theme.button(name)).widget().action = () -> {
+                    ShimUiScreen screen = new ShimUiScreen(theme, config);
+                    MinecraftClient mc = MinecraftClient.getInstance();
+                    screen.parent = mc.currentScreen;
+                    mc.setScreen(screen);
+                };
+            }
+        }
     }
 
     private void entry(EntryInfo<?> entry) throws IllegalAccessException {
+        if ("google-chat.jfconfig.enabled".equals(parent.getTranslationPrefix() + entry.getName())) return;
         Type type = entry.getValueType();
         WWidget widget = null;
         if (type.isInt()) {
@@ -120,9 +152,9 @@ public class ShimUi {
                 MeteorAdditions.LOG.error("Could not set setting", e);
             }
         });
-        setting.tooltip = parent.getTranslationPrefix() + entry.getName() + ".tooltip";
-        table.add(theme.label(parent.getTranslationPrefix() + entry.getName()));
-        table.add(setting).expandCellX();
+        setting.tooltip = translate(parent.getTranslationPrefix() + entry.getName() + ".tooltip");
+        table.add(theme.label(translate(parent.getTranslationPrefix() + entry.getName())));
+        table.add(setting).expandX().expandCellX();
         table.add(theme.button(GuiRenderer.RESET)).widget().action = () -> {
             try {
                 entry.reset();
@@ -133,5 +165,9 @@ public class ShimUi {
             }
         };
         return setting;
+    }
+
+    private static String translate(String key) {
+        return I18n.hasTranslation(key) ? I18n.translate(key) : key;
     }
 }

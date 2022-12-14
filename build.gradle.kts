@@ -30,8 +30,8 @@ dependencies {
     modImplementation("meteordevelopment:meteor-client:0.5.2-SNAPSHOT")
     modImplementation("com.terraformersmc:modmenu:5.0.2")
 
-    include(modImplementation("io.gitlab.jfronny:google-chat:0.5.0")!!)
-    val libjfVersion = "3.3.1"
+    include(modImplementation("io.gitlab.jfronny:google-chat:0.5.1")!!)
+    val libjfVersion = "3.4.0"
     include(modImplementation("io.gitlab.jfronny.libjf:libjf-config-core-v1:$libjfVersion")!!)
     include(modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v1:$libjfVersion")!!)
     include("io.gitlab.jfronny.libjf:libjf-base:$libjfVersion")

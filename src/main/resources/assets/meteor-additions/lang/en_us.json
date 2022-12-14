@@ -10,5 +10,6 @@
   "meteor-additions.loaded-ip-success": "Success!",
   "meteor-additions.loaded-ip-failed": "The IPs could not be loaded, look at the log for details",
   "meteor-additions.servers.button": "Servers",
-  "meteor-additions.presets": "Presets"
+  "meteor-additions.presets": "Presets",
+  "meteor-additions.referenced": "Referenced Configs"
 }

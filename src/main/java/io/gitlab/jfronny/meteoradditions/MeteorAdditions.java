@@ -1,10 +1,8 @@
 package io.gitlab.jfronny.meteoradditions;
 
 import io.gitlab.jfronny.meteoradditions.modules.*;
-import io.gitlab.jfronny.meteoradditions.util.LanguageSetting;
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
-import meteordevelopment.meteorclient.gui.utils.SettingsWidgetFactory;
 import meteordevelopment.meteorclient.systems.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -28,8 +26,6 @@ public class MeteorAdditions extends MeteorAddon {
 
     @Override
     public void onInitialize() {
-        SettingsWidgetFactory.registerCustomFactory(LanguageSetting.class, LanguageSetting::widget);
-
         // The formatting here is intentionally weird to not meet the regex filter used by anticope.ml
         // Since the feature list is generated from this file, we abuse the filter through comments instead.
         Modules reg = Modules.get();
