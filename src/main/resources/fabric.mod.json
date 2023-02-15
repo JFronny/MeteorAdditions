@@ -3,19 +3,20 @@
   "id": "meteor-additions",
   "version": "${version}",
   "name": "MeteorAdditions",
-  "description": "",
+  "description": "Addons for Meteor, partially based off of/inspired by Wurst",
   "authors": ["JFronny"],
-  "contact": {},
+  "contact": {
+    "email": "projects.contact@frohnmeyer-wds.de",
+    "homepage": "https://jfronny.gitlab.io",
+    "issues": "https://github.com/JFronny/MeteorAdditions/issues",
+    "sources": "https://github.com/JFronny/MeteorAdditions"
+  },
   "license": "MIT",
   "icon": "assets/meteor-additions/icon.png",
   "environment": "client",
   "entrypoints": {
-    "meteor": [
-      "io.gitlab.jfronny.meteoradditions.MeteorAdditions"
-    ],
-    "modmenu": [
-      "io.gitlab.jfronny.meteoradditions.ModMenuCompat"
-    ]
+    "meteor": ["io.gitlab.jfronny.meteoradditions.MeteorAdditions"],
+    "modmenu": ["io.gitlab.jfronny.meteoradditions.ModMenuCompat"]
   },
   "mixins": [
     "MeteorAdditions.mixins.json"

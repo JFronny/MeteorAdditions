@@ -8,10 +8,18 @@ import meteordevelopment.meteorclient.gui.widgets.WWidget;
 import meteordevelopment.meteorclient.gui.widgets.containers.WVerticalList;
 import meteordevelopment.meteorclient.systems.modules.Categories;
 import meteordevelopment.meteorclient.systems.modules.Module;
+import net.minecraft.nbt.NbtCompound;
 
 public class TranslatorModule extends Module {
     public TranslatorModule() {
         super(Categories.Misc, "translater", "Automatically translates chat messages");
+    }
+
+    @Override
+    public Module fromTag(NbtCompound tag) {
+        Module tm = super.fromTag(tag);
+        GoogleChatConfig.enabled = tm.isActive(); // Sync initial state
+        return tm;
     }
 
     @Override

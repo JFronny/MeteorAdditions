@@ -1,16 +1,15 @@
 package io.gitlab.jfronny.meteoradditions.util;
 
-import io.gitlab.jfronny.googlechat.JFC_GoogleChatConfig;
 import io.gitlab.jfronny.libjf.config.api.v1.*;
 import io.gitlab.jfronny.libjf.config.api.v1.type.Type;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
-import meteordevelopment.meteorclient.gui.*;
+import meteordevelopment.meteorclient.gui.GuiTheme;
+import meteordevelopment.meteorclient.gui.WindowScreen;
 import meteordevelopment.meteorclient.gui.renderer.GuiRenderer;
 import meteordevelopment.meteorclient.gui.widgets.WWidget;
 import meteordevelopment.meteorclient.gui.widgets.containers.*;
 import meteordevelopment.meteorclient.gui.widgets.input.*;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 
 import java.util.Map;
