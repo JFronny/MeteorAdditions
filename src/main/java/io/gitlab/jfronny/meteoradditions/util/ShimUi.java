@@ -9,6 +9,7 @@ import meteordevelopment.meteorclient.gui.renderer.GuiRenderer;
 import meteordevelopment.meteorclient.gui.widgets.WWidget;
 import meteordevelopment.meteorclient.gui.widgets.containers.*;
 import meteordevelopment.meteorclient.gui.widgets.input.*;
+import meteordevelopment.meteorclient.gui.widgets.pressable.WCheckbox;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 
@@ -59,6 +60,7 @@ public class ShimUi {
             for (Map.Entry<String, Runnable> entry : parent.getPresets().entrySet()) {
                 presets.add(theme.button(translate(parent.getTranslationPrefix() + entry.getKey()))).widget().action = () -> {
                     entry.getValue().run();
+                    parent.getRoot().write();
                     target.clear();
                     try {
                         generate();
@@ -94,7 +96,7 @@ public class ShimUi {
         Type type = entry.getValueType();
         WWidget widget = null;
         if (type.isInt()) {
-            widget = this.add((EntryInfo<Integer>) entry,
+            widget = add((EntryInfo<Integer>) entry,
                     theme.intEdit((int) entry.getValue(), (int) entry.getMinValue(), (int) entry.getMaxValue(), false),
                     (s, r) -> s.action = r,
                     WIntEdit::get,
@@ -153,7 +155,8 @@ public class ShimUi {
         });
         setting.tooltip = translate(parent.getTranslationPrefix() + entry.getName() + ".tooltip");
         table.add(theme.label(translate(parent.getTranslationPrefix() + entry.getName())));
-        table.add(setting).expandX().expandCellX();
+        var x = table.add(setting).expandCellX();
+        if (!(setting instanceof WCheckbox)) x.expandX();
         table.add(theme.button(GuiRenderer.RESET)).widget().action = () -> {
             try {
                 entry.reset();

@@ -1,6 +1,7 @@
 package io.gitlab.jfronny.meteoradditions.modules;
 
 import io.gitlab.jfronny.googlechat.GoogleChatConfig;
+import io.gitlab.jfronny.googlechat.JFC_GoogleChatConfig;
 import io.gitlab.jfronny.libjf.config.api.v1.ConfigInstance;
 import io.gitlab.jfronny.meteoradditions.util.ShimUi;
 import meteordevelopment.meteorclient.gui.GuiTheme;
@@ -12,13 +13,14 @@ import net.minecraft.nbt.NbtCompound;
 
 public class TranslatorModule extends Module {
     public TranslatorModule() {
-        super(Categories.Misc, "translater", "Automatically translates chat messages");
+        super(Categories.Misc, "translator", "Automatically translates chat messages");
     }
 
     @Override
     public Module fromTag(NbtCompound tag) {
         Module tm = super.fromTag(tag);
         GoogleChatConfig.enabled = tm.isActive(); // Sync initial state
+        JFC_GoogleChatConfig.write();
         return tm;
     }
 
@@ -32,10 +34,12 @@ public class TranslatorModule extends Module {
     @Override
     public void onActivate() {
         GoogleChatConfig.enabled = true;
+        JFC_GoogleChatConfig.write();
     }
 
     @Override
     public void onDeactivate() {
         GoogleChatConfig.enabled = false;
+        JFC_GoogleChatConfig.write();
     }
 }
