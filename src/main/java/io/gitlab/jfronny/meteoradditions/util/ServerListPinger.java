@@ -62,7 +62,7 @@ public class ServerListPinger {
         }
     }
 
-    public void add(final MServerInfo entry, final Runnable runnable) throws UnknownHostException {
+    public void add(final MServerInfo entry) throws UnknownHostException {
         Timer timeoutTimer = new Timer();
         ServerAddress serverAddress = ServerAddress.parse(entry.address);
         timeoutTimer.schedule(new TimerTask() {
@@ -76,7 +76,6 @@ public class ServerListPinger {
         this.clientConnections.add(clientConnection);
         entry.label = "multiplayer.status.pinging";
         entry.ping = -1L;
-        entry.playerListSummary = null;
         clientConnection.setPacketListener(new ClientQueryPacketListener() {
             private boolean sentQuery;
             private boolean received;
@@ -87,57 +86,25 @@ public class ServerListPinger {
                     clientConnection.disconnect(Text.translatable("multiplayer.status.unrequested"));
                 } else {
                     this.received = true;
-                    ServerMetadata serverMetadata = packet.getServerMetadata();
-                    if (serverMetadata.getDescription() != null) {
-                        entry.label = serverMetadata.getDescription().getString();
+                    ServerMetadata serverMetadata = packet.metadata();
+                    if (serverMetadata.description() != null) {
+                        entry.label = serverMetadata.description().getString();
                     } else {
                         entry.label = "";
                     }
 
-                    if (serverMetadata.getVersion() != null) {
-                        entry.version = serverMetadata.getVersion().getGameVersion();
-                        entry.protocolVersion = serverMetadata.getVersion().getProtocolVersion();
-                    } else {
-                        entry.version = "multiplayer.status.old";
-                        entry.protocolVersion = 0;
-                    }
+                    serverMetadata.version().ifPresentOrElse(
+                            version -> entry.version = version.gameVersion(),
+                            () -> entry.version = "multiplayer.status.old"
+                    );
 
-                    if (serverMetadata.getPlayers() != null) {
-                        entry.playerCountLabel = ServerListPinger.getPlayerCountLabel(serverMetadata.getPlayers().getOnlinePlayerCount(), serverMetadata.getPlayers().getPlayerLimit());
-                        entry.playerCount = serverMetadata.getPlayers().getOnlinePlayerCount();
-                        entry.playercountMax = serverMetadata.getPlayers().getPlayerLimit();
-                        List<Text> list = Lists.newArrayList();
-                        if (ArrayUtils.isNotEmpty(serverMetadata.getPlayers().getSample())) {
-                            GameProfile[] var4 = serverMetadata.getPlayers().getSample();
-
-                            for (GameProfile gameProfile : var4) {
-                                list.add(Text.literal(gameProfile.getName()));
-                            }
-
-                            if (serverMetadata.getPlayers().getSample().length < serverMetadata.getPlayers().getOnlinePlayerCount()) {
-                                list.add(Text.translatable("multiplayer.status.and_more", serverMetadata.getPlayers().getOnlinePlayerCount() - serverMetadata.getPlayers().getSample().length));
-                            }
-
-                            entry.playerListSummary = list;
-                        }
-                    } else {
+                    serverMetadata.players().ifPresentOrElse(players -> {
+                        entry.playerCountLabel = ServerListPinger.getPlayerCountLabel(players.online(), players.max());
+                        entry.playerCount = players.online();
+                        entry.playercountMax = players.max();
+                    }, () -> {
                         entry.playerCountLabel = "multiplayer.status.unknown";
-                    }
-
-                    String string = null;
-                    if (serverMetadata.getFavicon() != null) {
-                        String string2 = serverMetadata.getFavicon();
-                        if (string2.startsWith("data:image/png;base64,")) {
-                            string = string2.substring("data:image/png;base64,".length());
-                        } else {
-                            ServerListPinger.LOGGER.error("Invalid server icon (unknown format)");
-                        }
-                    }
-
-                    if (!Objects.equals(string, entry.getIcon())) {
-                        entry.setIcon(string);
-                        runnable.run();
-                    }
+                    });
 
                     this.startTime = Util.getMeasuringTimeMs();
                     clientConnection.send(new QueryPingC2SPacket(this.startTime));
@@ -163,6 +130,11 @@ public class ServerListPinger {
                     ServerListPinger.this.ping(entry);
                 }
                 notifyDisconnectListeners();
+            }
+
+            @Override
+            public boolean isConnectionOpen() {
+                return clientConnection.isOpen();
             }
 
             public ClientConnection getConnection() {
@@ -237,7 +209,6 @@ public class ServerListPinger {
                                 String string3 = strings[3];
                                 int j = MathHelper.parseInt(strings[4], -1);
                                 int k = MathHelper.parseInt(strings[5], -1);
-                                serverInfo.protocolVersion = -1;
                                 serverInfo.version = string2;
                                 serverInfo.label = string3;
                                 serverInfo.playerCountLabel = ServerListPinger.getPlayerCountLabel(j, k);

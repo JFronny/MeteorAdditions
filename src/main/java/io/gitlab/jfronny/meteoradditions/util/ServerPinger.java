@@ -118,7 +118,7 @@ public class ServerPinger implements IServerFinderDoneListener, IServerFinderDis
         //MeteorAdditions.LOG.info("Pinging " + ip + ":" + port + "...");
 
         try {
-            pinger.add(server, () -> {});
+            pinger.add(server);
         } catch(UnknownHostException e) {
             //MeteorAdditions.LOG.error("Unknown host: " + ip + ":" + port);
             failed = true;
@@ -149,10 +149,6 @@ public class ServerPinger implements IServerFinderDoneListener, IServerFinderDis
 
     public boolean isWorking() {
         return !failed;
-    }
-
-    public boolean isOtherVersion() {
-        return server.protocolVersion != 47;
     }
 
     public String getServerIP() {

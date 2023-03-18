@@ -21,7 +21,7 @@ public class AdditionsItemGroup {
             """;
     private static final Path LIST_FILE = FabricLoader.getInstance().getGameDir().resolve("meteor-client").resolve("additions_items.txt");
 
-    public static void register(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean operatorEnabled) {
+    public static void register(ItemGroup.DisplayContext displayContext, ItemGroup.Entries entries) {
         try {
             for (String s : read()) {
                 s = s.trim();
