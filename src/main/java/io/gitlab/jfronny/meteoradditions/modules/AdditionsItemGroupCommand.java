@@ -2,7 +2,8 @@ package io.gitlab.jfronny.meteoradditions.modules;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
-import meteordevelopment.meteorclient.systems.commands.Command;
+import meteordevelopment.meteorclient.MeteorClient;
+import meteordevelopment.meteorclient.commands.Command;
 import net.minecraft.command.CommandSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -20,7 +21,7 @@ public class AdditionsItemGroupCommand extends Command {
     public void build(LiteralArgumentBuilder<CommandSource> builder) {
         builder.executes(context -> {
             try {
-                ItemStack stack = mc.player.getInventory().getMainHandStack();
+                ItemStack stack = MeteorClient.mc.player.getInventory().getMainHandStack();
                 if (stack.getItem().equals(Items.AIR)) {
                     error("You must hold an item to add it");
                     return SINGLE_SUCCESS;

@@ -3,7 +3,7 @@ package io.gitlab.jfronny.meteoradditions;
 import io.gitlab.jfronny.meteoradditions.modules.*;
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
-import meteordevelopment.meteorclient.systems.commands.Commands;
+import meteordevelopment.meteorclient.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
@@ -32,7 +32,7 @@ public class MeteorAdditions extends MeteorAddon {
         reg.add( new AutoSpectre() );
         reg.add( new SpawnItems() );
         reg.add( new TranslatorModule() );
-        Commands.get().add( new AdditionsItemGroupCommand() );
+        Commands.add( new AdditionsItemGroupCommand() );
 
         // Features: (for parsing by anticope.ml)
         // add(new ModMenu integration for MeteorClient())
