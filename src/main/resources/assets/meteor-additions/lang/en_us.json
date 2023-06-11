@@ -1,5 +1,5 @@
 {
-  "itemGroup.meteor-additions.general": "MeteorAdditions",
+  "meteor-additions.item-group": "MeteorAdditions",
   "meteor-additions.error": "Something went wrong",
   "meteor-additions.saved-ip": "Saved %s new IP",
   "meteor-additions.saved-ips": "Saved %s new IPs",

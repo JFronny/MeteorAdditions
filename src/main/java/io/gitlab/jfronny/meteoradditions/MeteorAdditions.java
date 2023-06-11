@@ -10,6 +10,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
 import net.minecraft.item.*;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +24,16 @@ import java.util.Optional;
 public class MeteorAdditions extends MeteorAddon {
     public static final String MOD_ID = "meteor-additions";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_ID);
-    public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder(new Identifier(MOD_ID, "general"))
-            .icon(() -> new ItemStack(Items.TNT))
-            .entries(AdditionsItemGroup::register)
-            .build();
+    public static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "general"));
 
     @Override
     public void onInitialize() {
+        Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, FabricItemGroup.builder()
+                .icon(() -> new ItemStack(Items.TNT))
+                        .displayName(Text.translatable("meteor-additions.item-group"))
+                .entries(AdditionsItemGroup::register)
+                .build());
+
         // The formatting here is intentionally weird to not meet the regex filter used by anticope.ml
         // Since the feature list is generated from this file, we abuse the filter through comments instead.
         Modules reg = Modules.get();
