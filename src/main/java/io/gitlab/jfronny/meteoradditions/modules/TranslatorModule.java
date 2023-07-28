@@ -19,7 +19,7 @@ public class TranslatorModule extends Module {
     @Override
     public Module fromTag(NbtCompound tag) {
         Module tm = super.fromTag(tag);
-        GoogleChatConfig.enabled = tm.isActive(); // Sync initial state
+        GoogleChatConfig.General.enabled = tm.isActive(); // Sync initial state
         JFC_GoogleChatConfig.write();
         return tm;
     }
@@ -33,13 +33,13 @@ public class TranslatorModule extends Module {
 
     @Override
     public void onActivate() {
-        GoogleChatConfig.enabled = true;
+        GoogleChatConfig.General.enabled = true;
         JFC_GoogleChatConfig.write();
     }
 
     @Override
     public void onDeactivate() {
-        GoogleChatConfig.enabled = false;
+        GoogleChatConfig.General.enabled = false;
         JFC_GoogleChatConfig.write();
     }
 }

@@ -58,7 +58,7 @@ public class ShimUi {
         if (!parent.getPresets().isEmpty()) {
             WSection presets = target.add(theme.section(translate("meteor-additions.presets"), false)).expandX().widget();
             for (Map.Entry<String, Runnable> entry : parent.getPresets().entrySet()) {
-                presets.add(theme.button(translate(parent.getTranslationPrefix() + entry.getKey()))).widget().action = () -> {
+                presets.add(theme.button(translate(entry.getKey()))).widget().action = () -> {
                     entry.getValue().run();
                     parent.getRoot().write();
                     target.clear();
