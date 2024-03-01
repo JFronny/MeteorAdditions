@@ -2,7 +2,7 @@ package io.gitlab.jfronny.meteoradditions.modules;
 
 import io.gitlab.jfronny.googlechat.GoogleChatConfig;
 import io.gitlab.jfronny.googlechat.JFC_GoogleChatConfig;
-import io.gitlab.jfronny.libjf.config.api.v1.ConfigInstance;
+import io.gitlab.jfronny.libjf.config.api.v2.ConfigInstance;
 import io.gitlab.jfronny.meteoradditions.util.ShimUi;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.widgets.WWidget;

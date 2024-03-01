@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.3-SNAPSHOT"
+    id("fabric-loom") version "1.5-SNAPSHOT"
 }
 
 java {
@@ -18,21 +18,21 @@ repositories {
 }
 
 // https://fabricmc.net/develop
-val game = "1.20.1"
+val game = "1.20.4"
 
 dependencies {
     minecraft("com.mojang:minecraft:$game")
-    mappings("net.fabricmc:yarn:$game+build.10:v2")
-    modImplementation("net.fabricmc:fabric-loader:0.14.21")
+    mappings("net.fabricmc:yarn:$game+build.2:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.15.1")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.86.1+$game")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.96.4+$game")
 
-    modImplementation("meteordevelopment:meteor-client:0.5.4-SNAPSHOT")
-    modImplementation("com.terraformersmc:modmenu:7.2.1")
+    modImplementation("meteordevelopment:meteor-client:0.5.6-SNAPSHOT")
+    modImplementation("com.terraformersmc:modmenu:9.0.0")
 
-    include(modImplementation("io.gitlab.jfronny:google-chat:0.7.0")!!)
-    val libjfVersion = "3.10.2"
-    include(modImplementation("io.gitlab.jfronny.libjf:libjf-config-core-v1:$libjfVersion")!!)
+    include(modImplementation("io.gitlab.jfronny:google-chat:0.7.4")!!)
+    val libjfVersion = "3.14.2"
+    include(modImplementation("io.gitlab.jfronny.libjf:libjf-config-core-v2:$libjfVersion")!!)
     include(modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v1:$libjfVersion")!!)
     include("io.gitlab.jfronny.libjf:libjf-base:$libjfVersion")
 }

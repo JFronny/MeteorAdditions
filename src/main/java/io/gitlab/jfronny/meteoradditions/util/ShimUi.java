@@ -1,7 +1,7 @@
 package io.gitlab.jfronny.meteoradditions.util;
 
-import io.gitlab.jfronny.libjf.config.api.v1.*;
-import io.gitlab.jfronny.libjf.config.api.v1.type.Type;
+import io.gitlab.jfronny.libjf.config.api.v2.*;
+import io.gitlab.jfronny.libjf.config.api.v2.type.Type;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.WindowScreen;
