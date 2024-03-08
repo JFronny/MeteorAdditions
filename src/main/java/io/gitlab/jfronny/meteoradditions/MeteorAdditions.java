@@ -42,6 +42,8 @@ public class MeteorAdditions extends MeteorAddon {
         reg.add( new TranslatorModule() );
         Commands.add( new AdditionsItemGroupCommand() );
 
+        SearchKeywords.configure();
+
         // Features: (for parsing by anticope.ml)
         // add(new ModMenu integration for MeteorClient())
         // add(new "Servers" option in the multiplayer menu with various tools including a server finder())
@@ -49,6 +51,7 @@ public class MeteorAdditions extends MeteorAddon {
         // add(new Configurable Creative tab with several OP items, see README())
         // add(new AutoSpectre based on PR 1932())
         // add(new Translator module for chat translations())
+        // add(new Keywords for module search())
     }
 
     @Override

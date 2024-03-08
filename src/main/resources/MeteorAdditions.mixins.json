@@ -4,6 +4,8 @@
   "package": "io.gitlab.jfronny.meteoradditions.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "ModuleMixin",
+    "ModulesMixin",
     "MultiplayerScreenAccessor",
     "MultiplayerScreenMixin"
   ],
