@@ -3,6 +3,7 @@ package io.gitlab.jfronny.meteoradditions.modules;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import io.gitlab.jfronny.meteoradditions.util.CustomItemStringReader;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.*;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 
@@ -11,13 +12,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AdditionsItemGroup {
     private static final String DEFAULT_ITEMS = """
             minecraft:chest@bloat#Chest of NBT
-            minecraft:splash_potion{CustomPotionEffects:[{Amplifier:125,Duration:2000,Id:6}]}#\u00a7rSplash Potion of \u00a74\u00a7lINSTANT DEATH
-            minecraft:netherite_sword{Enchantments:[{id:"minecraft:sharpness", lvl:32767}, {id:"minecraft:knockback", lvl:32767}, {id:"minecraft:fire_aspect", lvl:32767}, {id:"minecraft:looting", lvl:10}, {id:"minecraft:sweeping", lvl:3}, {id:"minecraft:unbreaking", lvl:32767}, {id:"minecraft:mending", lvl:1}, {id:"minecraft:vanishing_curse", lvl:1}]}#Bonk
-            minecraft:splash_potion{CustomPotionEffects:[{Amplifier:2147483647, Duration:2147483647, Id:1}, {Amplifier:2147483647, Duration:2147483647, Id:2}, {Amplifier:2147483647, Duration:2147483647, Id:3}, {Amplifier:2147483647, Duration:2147483647, Id:4}, {Amplifier:2147483647, Duration:2147483647, Id:5}, {Amplifier:2147483647, Duration:2147483647, Id:6}, {Amplifier:2147483647, Duration:2147483647, Id:7}, {Amplifier:2147483647, Duration:2147483647, Id:8}, {Amplifier:2147483647, Duration:2147483647, Id:9}, {Amplifier:2147483647, Duration:2147483647, Id:10}, {Amplifier:2147483647, Duration:2147483647, Id:11}, {Amplifier:2147483647, Duration:2147483647, Id:12}, {Amplifier:2147483647, Duration:2147483647, Id:13}, {Amplifier:2147483647, Duration:2147483647, Id:14}, {Amplifier:2147483647, Duration:2147483647, Id:15}, {Amplifier:2147483647, Duration:2147483647, Id:16}, {Amplifier:2147483647, Duration:2147483647, Id:17}, {Amplifier:2147483647, Duration:2147483647, Id:18}, {Amplifier:2147483647, Duration:2147483647, Id:19}, {Amplifier:2147483647, Duration:2147483647, Id:20}, {Amplifier:2147483647, Duration:2147483647, Id:21}, {Amplifier:2147483647, Duration:2147483647, Id:22}, {Amplifier:2147483647, Duration:2147483647, Id:23}]}#\u00a7rSplash Potion of Trolling
+            minecraft:netherite_sword{enchantments:{"minecraft:sharpness": 255, "minecraft:knockback": 255, "minecraft:fire_aspect": 255, "minecraft:looting": 10, "minecraft:sweeping_edge": 3, "minecraft:unbreaking": 255, "minecraft:mending": 1, "minecraft:vanishing_curse": 1}}#Bonk
+            minecraft:splash_potion{potion_contents:{custom_effects:[{amplifier:125,duration:2000,id:"instant_health"}]}}#§rSplash Potion of §4§lINSTANT DEATH
+            minecraft:splash_potion@all_effects#§rSplash Potion of Trolling
             """;
     private static final Path LIST_FILE = FabricLoader.getInstance().getGameDir().resolve("meteor-client").resolve("additions_items.txt");
 
@@ -29,22 +31,26 @@ public class AdditionsItemGroup {
                 try {
                     entries.add(CustomItemStringReader.read(s));
                 } catch (CustomItemStringReader.ItemSyntaxException e) {
-                    MeteorAdditions.LOG.error("Could not parse item for additions group (\"" + s + "\")", e);
+                    MeteorAdditions.LOG.error("Could not parse item for additions group (\"{}\")", s, e);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            MeteorAdditions.LOG.error("Could not read items for additions group", e);
         }
     }
 
-    public static String addItem(ItemStack stack) throws IOException {
-        StringBuilder sb = new StringBuilder(stack.getItem().toString());
-        if (stack.getNbt() != null) sb.append(stack.getNbt());
-        if (stack.getCount() != 1) sb.append('$').append(stack.getCount());
+    public static Optional<String> addItem(ItemStack stack) throws IOException {
+        String st;
+        try {
+            st = CustomItemStringReader.write(stack);
+        } catch (CustomItemStringReader.ItemSyntaxException e) {
+            MeteorAdditions.LOG.error("Could not write item", e);
+            return Optional.empty();
+        }
         List<String> newItems = new ArrayList<>(read());
-        newItems.add(sb.toString());
+        newItems.add(st);
         Files.write(LIST_FILE, newItems);
-        return sb.toString();
+        return Optional.of(st);
     }
 
     private static List<String> read() throws IOException {

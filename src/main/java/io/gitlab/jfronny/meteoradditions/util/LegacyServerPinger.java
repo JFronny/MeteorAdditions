@@ -27,18 +27,18 @@ public class LegacyServerPinger {
     private void pingInCurrentThread(String ip, int port)
     {
         MultiplayerServerListPinger pinger = new MultiplayerServerListPinger();
-        MeteorAdditions.LOG.info("Pinging " + ip + ":" + port + "...");
+        MeteorAdditions.LOG.info("Pinging {}:{}...", ip, port);
 
         try {
-            pinger.add(server, () -> {});
-            MeteorAdditions.LOG.info("Ping successful: " + ip + ":" + port);
+            pinger.add(server, () -> {}, () -> {});
+            MeteorAdditions.LOG.info("Ping successful: {}:{}", ip, port);
 
         } catch(UnknownHostException e) {
-            MeteorAdditions.LOG.warn("Unknown host: " + ip + ":" + port);
+            MeteorAdditions.LOG.warn("Unknown host: {}:{}", ip, port);
             failed = true;
 
         } catch(Exception e2) {
-            MeteorAdditions.LOG.warn("Ping failed: " + ip + ":" + port);
+            MeteorAdditions.LOG.warn("Ping failed: {}:{}", ip, port);
             failed = true;
         }
 

@@ -26,7 +26,10 @@ public class AdditionsItemGroupCommand extends Command {
                     error("You must hold an item to add it");
                     return SINGLE_SUCCESS;
                 }
-                info("Saved item: " + AdditionsItemGroup.addItem(stack));
+                AdditionsItemGroup.addItem(stack).ifPresentOrElse(
+                        s -> info("Saved item: " + s),
+                        () -> error("Could not add item")
+                );
             } catch (IOException e) {
                 MeteorAdditions.LOG.error("Could not add item", e);
                 error("Could not add item");

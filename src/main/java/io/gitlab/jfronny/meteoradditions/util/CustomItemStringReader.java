@@ -2,15 +2,44 @@ package io.gitlab.jfronny.meteoradditions.util;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.DataResult;
+import io.gitlab.jfronny.commons.throwable.Coerce;
+import io.gitlab.jfronny.commons.throwable.ThrowingFunction;
+import net.minecraft.component.ComponentChanges;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
+import net.minecraft.nbt.visitor.StringNbtWriter;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 public class CustomItemStringReader {
+    private static final ThrowingFunction<NbtElement, ComponentChanges, ItemSyntaxException> parser = Coerce
+            .<NbtElement, DataResult<ComponentChanges>, ItemSyntaxException>function(NbtOps.INSTANCE.withParser(ComponentChanges.CODEC)::apply)
+            .andThen(Coerce.function(result -> result.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e))));
+    private static final ThrowingFunction<ComponentChanges, NbtElement, ItemSyntaxException> encoder = Coerce
+            .<ComponentChanges, DataResult<NbtElement>, ItemSyntaxException>function(NbtOps.INSTANCE.withEncoder(ComponentChanges.CODEC)::apply)
+            .andThen(Coerce.function(result -> result.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e))));
+
+    public static String write(ItemStack stack) throws ItemSyntaxException {
+        StringBuilder sb = new StringBuilder(stack.getItem().toString());
+        sb.append(new StringNbtWriter().apply(encoder.apply(stack.getComponentChanges())));
+        if (stack.getCount() != 1) sb.append('$').append(stack.getCount());
+        return sb.toString();
+    }
+
     public static ItemStack read(String desc) throws ItemSyntaxException {
         StringReader reader = new StringReader(desc);
         Identifier identifier = readIdentifier(reader);
@@ -21,7 +50,7 @@ public class CustomItemStringReader {
                 case '{' -> {
                     try {
                         reader.setCursor(reader.getCursor() - 1);
-                        stack.setNbt(new StringNbtReader(reader).parseCompound());
+                        stack.applyChanges(parser.apply(new StringNbtReader(reader).parseCompound()));
                     } catch (CommandSyntaxException e) {
                         throw new ItemSyntaxException("Could not parse NBT", e);
                     }
@@ -30,17 +59,33 @@ public class CustomItemStringReader {
                     String special = readString(reader);
                     switch (special) {
                         case "bloat" -> {
-                            NbtCompound nbtCompound = new NbtCompound();
-                            NbtList nbtList = new NbtList();
-                            for (int i = 0; i < 40000; i++)
-                                nbtList.add(new NbtList());
-                            nbtCompound.put("nothingsuspicioushere", nbtList);
-                            stack.setNbt(nbtCompound);
+                            stack.set(DataComponentTypes.CUSTOM_DATA, stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).apply(compound -> {
+                                NbtList nbtList = new NbtList();
+                                for (int i = 0; i < 40000; i++)
+                                    nbtList.add(new NbtList());
+                                compound.put("nothingsuspicioushere", nbtList);
+                            }));
+                        }
+                        case "all_effects" -> {
+                            stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(
+                                    Optional.empty(),
+                                    Optional.of(-524040),
+                                    Registries.STATUS_EFFECT
+                                            .getKeys()
+                                            .stream()
+                                            .map(Registries.STATUS_EFFECT::getEntry)
+                                            .flatMap(Optional::stream)
+                                            .map(s -> new StatusEffectInstance(
+                                                    s,
+                                                    Integer.MAX_VALUE,
+                                                    Integer.MAX_VALUE
+                                            )).toList()
+                            ));
                         }
                         default -> throw new ItemSyntaxException("Could not resolve special NBT: " + special);
                     }
                 }
-                case '#' -> stack.setCustomName(Text.literal(readStringLiteral(reader)));
+                case '#' -> stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(readStringLiteral(reader)));
                 case '$' -> stack.setCount(readInt(reader));
             }
         }
