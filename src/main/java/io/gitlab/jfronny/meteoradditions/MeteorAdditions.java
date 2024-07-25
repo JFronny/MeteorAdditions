@@ -24,16 +24,18 @@ import java.util.Optional;
 public class MeteorAdditions extends MeteorAddon {
     public static final String MOD_ID = "meteor-additions";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_ID);
-    public static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "general"));
+    public static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(MOD_ID, "general"));
+
+    public static void gameInit() {
+        Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, FabricItemGroup.builder()
+                .icon(() -> new ItemStack(Items.TNT))
+                .displayName(Text.translatable("meteor-additions.item-group"))
+                .entries(AdditionsItemGroup::register)
+                .build());
+    }
 
     @Override
     public void onInitialize() {
-        Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, FabricItemGroup.builder()
-                .icon(() -> new ItemStack(Items.TNT))
-                        .displayName(Text.translatable("meteor-additions.item-group"))
-                .entries(AdditionsItemGroup::register)
-                .build());
-
         // The formatting here is intentionally weird to not meet the regex filter used by anticope.ml
         // Since the feature list is generated from this file, we abuse the filter through comments instead.
         Modules reg = Modules.get();

@@ -6,8 +6,6 @@ import com.mojang.serialization.DataResult;
 import io.gitlab.jfronny.commons.throwable.Coerce;
 import io.gitlab.jfronny.commons.throwable.ThrowingFunction;
 import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.component.type.PotionContentsComponent;
@@ -21,9 +19,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class CustomItemStringReader {
     private static final ThrowingFunction<NbtElement, ComponentChanges, ItemSyntaxException> parser = Coerce
@@ -95,7 +91,7 @@ public class CustomItemStringReader {
     private static Identifier readIdentifier(StringReader reader) throws ItemSyntaxException {
         String string = readString(reader);
         try {
-            return new Identifier(string);
+            return Identifier.of(string);
         } catch (InvalidIdentifierException var4) {
             throw new ItemSyntaxException("Could not read identifier: " + string);
         }

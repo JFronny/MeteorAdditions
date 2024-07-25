@@ -1,23 +1,16 @@
 package io.gitlab.jfronny.meteoradditions.util;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.network.Address;
 import net.minecraft.client.network.AllowedAddressResolver;
 import net.minecraft.client.network.LegacyServerPinger;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.NetworkSide;
+import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.network.listener.ClientQueryPacketListener;
-import net.minecraft.network.packet.c2s.handshake.ConnectionIntent;
-import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryPingC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
 import net.minecraft.network.packet.s2c.query.PingResultS2CPacket;
@@ -25,15 +18,12 @@ import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.profiler.MultiValueDebugSampleLogImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ServerListPinger {
@@ -118,9 +108,9 @@ public class ServerListPinger {
                 clientConnection.disconnect(Text.translatable("multiplayer.status.finished"));
             }
 
-            public void onDisconnected(Text reason) {
+            public void onDisconnected(DisconnectionInfo info) {
                 if (!this.sentQuery) {
-                    ServerListPinger.LOGGER.error("Can't ping {}: {}", entry.address, reason.getString());
+                    ServerListPinger.LOGGER.error("Can't ping {}: {}", entry.address, info.reason().getString());
                     entry.label = "multiplayer.status.cannot_connect";
                     entry.playerCountLabel = "";
                     entry.playerCount = 0;

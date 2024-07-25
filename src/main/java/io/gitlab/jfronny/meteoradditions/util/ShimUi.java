@@ -78,7 +78,7 @@ public class ShimUi {
         target.add(table).expandX();
         for (EntryInfo<?> entry : parent.getEntries()) entry(entry);
         if (!parent.getReferencedConfigs().isEmpty()) {
-            WSection referenced = target.add(theme.section("meteor-additions.referenced", false)).expandX().widget();
+            WSection referenced = target.add(theme.section(translate("meteor-additions.referenced"), false)).expandX().widget();
             for (ConfigInstance config : parent.getReferencedConfigs()) {
                 String name = translate(config.getTranslationPrefix() + "title");
                 referenced.add(theme.button(name)).widget().action = () -> {
