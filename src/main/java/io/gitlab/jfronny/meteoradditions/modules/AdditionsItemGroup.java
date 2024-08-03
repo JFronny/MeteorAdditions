@@ -3,9 +3,7 @@ package io.gitlab.jfronny.meteoradditions.modules;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import io.gitlab.jfronny.meteoradditions.util.CustomItemStringReader;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.*;
-import net.minecraft.resource.featuretoggle.FeatureSet;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -22,11 +22,12 @@ import net.minecraft.util.InvalidIdentifierException;
 import java.util.Optional;
 
 public class CustomItemStringReader {
+    private static final CustomWrapperLookup LOOKUP = new CustomWrapperLookup();
     private static final ThrowingFunction<NbtElement, ComponentChanges, ItemSyntaxException> parser = Coerce
-            .<NbtElement, DataResult<ComponentChanges>, ItemSyntaxException>function(NbtOps.INSTANCE.withParser(ComponentChanges.CODEC)::apply)
+            .<NbtElement, DataResult<ComponentChanges>, ItemSyntaxException>function(LOOKUP.getOps(NbtOps.INSTANCE).withParser(ComponentChanges.CODEC)::apply)
             .andThen(Coerce.function(result -> result.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e))));
     private static final ThrowingFunction<ComponentChanges, NbtElement, ItemSyntaxException> encoder = Coerce
-            .<ComponentChanges, DataResult<NbtElement>, ItemSyntaxException>function(NbtOps.INSTANCE.withEncoder(ComponentChanges.CODEC)::apply)
+            .<ComponentChanges, DataResult<NbtElement>, ItemSyntaxException>function(LOOKUP.getOps(NbtOps.INSTANCE).withEncoder(ComponentChanges.CODEC)::apply)
             .andThen(Coerce.function(result -> result.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e))));
 
     public static String write(ItemStack stack) throws ItemSyntaxException {
