@@ -11,13 +11,13 @@ public class ModuleMixin implements IModule {
 
     @Override
     @Unique
-    public void setKeywords(String... keywords) {
+    public void meteorAdditions$setKeywords(String... keywords) {
         this.keywords = keywords;
     }
 
     @Override
     @Unique
-    public String getQueryString() {
+    public String meteorAdditions$getQueryString() {
         return ((Module) (Object) this).name + (keywords == null || keywords.length == 0 ? "" : "-" + String.join("-", keywords));
     }
 }

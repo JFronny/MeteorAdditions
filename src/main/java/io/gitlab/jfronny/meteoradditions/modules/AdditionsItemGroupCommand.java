@@ -10,8 +10,6 @@ import net.minecraft.item.Items;
 
 import java.io.IOException;
 
-import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
-
 public class AdditionsItemGroupCommand extends Command {
     public AdditionsItemGroupCommand() {
         super("meteoradditions-item-group-add", "Add the held item to the MeteorAdditions item group", "item-group-add", "save-item");

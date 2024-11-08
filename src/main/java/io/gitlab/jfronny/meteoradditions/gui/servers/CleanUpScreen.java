@@ -98,7 +98,7 @@ public class CleanUpScreen extends WindowScreen {
     private boolean isUnknownHost(ServerInfo server) {
         if (server.label == null || server.label.getString() == null) return false;
 
-        return server.label.getString().equals("\u00a74Can't resolve hostname");
+        return server.label.getString().equals("§4Can't resolve hostname");
     }
 
     private boolean isSameProtocol(ServerInfo server) {

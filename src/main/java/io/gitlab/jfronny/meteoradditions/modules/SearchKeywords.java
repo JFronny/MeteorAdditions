@@ -41,10 +41,10 @@ public class SearchKeywords {
         register("kill-aura", "click", "multi");
 
         Modules modules = Modules.get();
-        KEYWORDS.forEach((name, keywords) -> ((IModule) modules.get(name)).setKeywords(keywords));
+        KEYWORDS.forEach((name, keywords) -> ((IModule) modules.get(name)).meteorAdditions$setKeywords(keywords));
         KEYWORDS_OPTIONAL.forEach((name, keywords) -> {
             Module module = modules.get(name);
-            if (module != null) ((IModule) module).setKeywords(keywords);
+            if (module != null) ((IModule) module).meteorAdditions$setKeywords(keywords);
         });
     }
 }

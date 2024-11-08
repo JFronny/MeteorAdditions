@@ -18,7 +18,7 @@ public class ModMenuCompat implements ModMenuApi {
     public Map<String, ConfigScreenFactory<?>> getProvidedConfigScreenFactories() {
         Map<String, ConfigScreenFactory<?>> m = MutCollection.mapOf("meteor-client", s -> {
             GuiTheme theme = GuiThemes.get();
-            TabScreen screen = Tabs.get().get(0).createScreen(theme);
+            TabScreen screen = Tabs.get().getFirst().createScreen(theme);
             screen.addDirect(theme.topBar()).top().centerX();
             return screen;
         });

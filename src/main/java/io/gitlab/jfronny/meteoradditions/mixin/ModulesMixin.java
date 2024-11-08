@@ -15,6 +15,6 @@ public class ModulesMixin {
             remap = false
     )
     private String modifySearchTitlesArg(Module instance) {
-        return ((IModule) instance).getQueryString();
+        return ((IModule) instance).meteorAdditions$getQueryString();
     }
 }

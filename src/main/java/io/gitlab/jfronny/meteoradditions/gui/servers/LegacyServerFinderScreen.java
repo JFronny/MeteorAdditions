@@ -113,7 +113,7 @@ public class LegacyServerFinderScreen extends WindowScreen {
                         updatePingers(pingers);
                     }
                 }
-            while(pingers.size() > 0) {
+            while(!pingers.isEmpty()) {
                 if(state == ServerFinderState.CANCELLED)
                     return;
 
