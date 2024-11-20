@@ -40,7 +40,7 @@ public class CustomItemStringReader {
     public static ItemStack read(String desc) throws ItemSyntaxException {
         StringReader reader = new StringReader(desc);
         Identifier identifier = readIdentifier(reader);
-        Item item = Registries.ITEM.getOrEmpty(identifier).orElseThrow(() -> new ItemSyntaxException("Invalid item ID: " + identifier));
+        Item item = Registries.ITEM.getOptionalValue(identifier).orElseThrow(() -> new ItemSyntaxException("Invalid item ID: " + identifier));
         ItemStack stack = new ItemStack(item, 1);
         while (reader.canRead()) {
             switch (reader.read()) {
@@ -66,17 +66,18 @@ public class CustomItemStringReader {
                         case "all_effects" -> {
                             stack.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(
                                     Optional.empty(),
-                                    Optional.of(-524040),
+                                    Optional.of(0xfff800f8),
                                     Registries.STATUS_EFFECT
                                             .getKeys()
                                             .stream()
-                                            .map(Registries.STATUS_EFFECT::getEntry)
+                                            .map(Registries.STATUS_EFFECT::getOptional)
                                             .flatMap(Optional::stream)
                                             .map(s -> new StatusEffectInstance(
                                                     s,
                                                     Integer.MAX_VALUE,
                                                     Integer.MAX_VALUE
-                                            )).toList()
+                                            )).toList(),
+                                    Optional.empty()
                             ));
                         }
                         default -> throw new ItemSyntaxException("Could not resolve special NBT: " + special);

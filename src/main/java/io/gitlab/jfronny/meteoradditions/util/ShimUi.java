@@ -12,6 +12,8 @@ import meteordevelopment.meteorclient.gui.widgets.input.*;
 import meteordevelopment.meteorclient.gui.widgets.pressable.WCheckbox;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -24,31 +26,35 @@ public class ShimUi {
     private final WTable table;
     private final WVerticalList target;
     private final ConfigCategory parent;
+    private final Naming naming;
 
-    private ShimUi(GuiTheme theme, WVerticalList target, ConfigCategory parent) {
+    private ShimUi(GuiTheme theme, WVerticalList target, ConfigCategory parent, Naming naming) {
         this.theme = theme;
         this.table = theme.table();
         this.target = target;
         this.parent = Objects.requireNonNull(parent);
+        this.naming = naming;
     }
 
     public static class ShimUiScreen extends WindowScreen {
         private final ConfigInstance config;
+        private final Naming naming;
 
-        public ShimUiScreen(GuiTheme theme, ConfigInstance config) {
-            super(theme, translate(config.getTranslationPrefix() + "title"));
+        public ShimUiScreen(GuiTheme theme, ConfigInstance config, Naming naming) {
+            super(theme, translate(naming.name()));
             this.config = config;
+            this.naming = naming;
         }
 
         @Override
         public void initWidgets() {
-            generate(config, theme, window);
+            generate(config, naming, theme, window);
         }
     }
 
-    public static void generate(ConfigInstance config, GuiTheme theme, WVerticalList target) {
+    public static void generate(ConfigInstance config, Naming naming, GuiTheme theme, WVerticalList target) {
         try {
-            new ShimUi(theme, target, config).generate();
+            new ShimUi(theme, target, config, naming).generate();
         } catch (IllegalAccessException e) {
             MeteorAdditions.LOG.error("Could not shim UI", e);
         }
@@ -72,17 +78,19 @@ public class ShimUi {
             }
         }
         for (var entry : parent.getCategories().entrySet()) {
-            WSection section = target.add(theme.section(translate(entry.getValue().getTranslationPrefix() + "title"), false)).expandX().widget();
-            new ShimUi(theme, section, entry.getValue()).generate();
+            var categoryNaming = naming.category(entry.getKey());
+            WSection section = target.add(theme.section(translate(categoryNaming.name()), false)).expandX().widget();
+            new ShimUi(theme, section, entry.getValue(), categoryNaming).generate();
         }
         target.add(table).expandX();
-        for (EntryInfo<?> entry : parent.getEntries()) entry(entry);
+        for (EntryInfo<?> entry : parent.getEntries()) entry(entry, naming.entry(entry.getName()));
         if (!parent.getReferencedConfigs().isEmpty()) {
             WSection referenced = target.add(theme.section(translate("meteor-additions.referenced"), false)).expandX().widget();
             for (ConfigInstance config : parent.getReferencedConfigs()) {
-                String name = translate(config.getTranslationPrefix() + "title");
+                var referencedNaming = naming.referenced(config);
+                String name = translate(referencedNaming.name());
                 referenced.add(theme.button(name)).widget().action = () -> {
-                    ShimUiScreen screen = new ShimUiScreen(theme, config);
+                    ShimUiScreen screen = new ShimUiScreen(theme, config, referencedNaming);
                     MinecraftClient mc = MinecraftClient.getInstance();
                     screen.parent = mc.currentScreen;
                     mc.setScreen(screen);
@@ -91,12 +99,13 @@ public class ShimUi {
         }
     }
 
-    private void entry(EntryInfo<?> entry) throws IllegalAccessException {
-        if ("google-chat.jfconfig.enabled".equals(parent.getTranslationPrefix() + entry.getName())) return;
+    private static final Text enabledText = Text.translatableWithFallback("google-chat.jfconfig.enabled", "enabled");
+    private void entry(EntryInfo<?> entry, Naming.Entry naming) throws IllegalAccessException {
+        if (enabledText.equals(naming.name())) return;
         Type type = entry.getValueType();
         WWidget widget = null;
         if (type.isInt()) {
-            widget = add((EntryInfo<Integer>) entry,
+            widget = add((EntryInfo<Integer>) entry, naming,
                     theme.intEdit((int) entry.getValue(), (int) entry.getMinValue(), (int) entry.getMaxValue(), false),
                     (s, r) -> s.action = r,
                     WIntEdit::get,
@@ -104,46 +113,46 @@ public class ShimUi {
         } else if (type.isLong()) {
             // Unsupported
         } else if (type.isFloat()) {
-            widget = add((EntryInfo<Float>) entry,
+            widget = add((EntryInfo<Float>) entry, naming,
                     theme.doubleEdit((float) entry.getValue(), entry.getMinValue(), entry.getMaxValue()),
                     (s, r) -> s.action = r,
                     s -> (float) s.get(),
                     (s, v) -> s.set(v));
         } else if (type.isDouble()) {
-            widget = add((EntryInfo<Double>) entry,
+            widget = add((EntryInfo<Double>) entry, naming,
                     theme.doubleEdit((double) entry.getValue(), entry.getMinValue(), entry.getMaxValue()),
                     (s, r) -> s.action = r,
                     WDoubleEdit::get,
                     WDoubleEdit::set);
         } else if (type.isString()) {
-            widget = add((EntryInfo<String>) entry,
+            widget = add((EntryInfo<String>) entry, naming,
                     theme.textBox((String) entry.getValue()),
                     (s, r) -> s.action = r,
                     WTextBox::get,
                     WTextBox::set);
         } else if (type.isBool()) {
-            widget = add((EntryInfo<Boolean>) entry,
+            widget = add((EntryInfo<Boolean>) entry, naming,
                     theme.checkbox((boolean) entry.getValue()),
                     (s, r) -> s.action = r,
                     s -> s.checked,
                     (s, v) -> s.checked = v);
         } else if (type.isEnum()) {
-            widget = tEnum(entry, type.asEnum());
+            widget = tEnum(entry, naming, type.asEnum());
         }
 
         if (widget == null) table.add(theme.label(entry.getName() + " (unsupported)"));
         table.row();
     }
 
-    private <T> WWidget tEnum(EntryInfo<T> entry, Type.TEnum<T> type) throws IllegalAccessException {
-        return add(entry,
+    private <T> WWidget tEnum(EntryInfo<T> entry, Naming.Entry naming, Type.TEnum<T> type) throws IllegalAccessException {
+        return add(entry, naming,
                 theme.dropdown(type.options(), entry.getValue()),
                 (s, r) -> s.action = r,
                 WDropdown::get,
                 WDropdown::set);
     }
 
-    private <T extends WWidget, V> T add(EntryInfo<V> entry, T setting, BiConsumer<T, Runnable> setAction, Function<T, V> get, BiConsumer<T, V> set) {
+    private <T extends WWidget, V> T add(EntryInfo<V> entry, Naming.Entry naming, T setting, BiConsumer<T, Runnable> setAction, Function<T, V> get, BiConsumer<T, V> set) {
         setAction.accept(setting, () -> {
             try {
                 entry.setValue(get.apply(setting));
@@ -153,8 +162,8 @@ public class ShimUi {
                 MeteorAdditions.LOG.error("Could not set setting", e);
             }
         });
-        setting.tooltip = translate(parent.getTranslationPrefix() + entry.getName() + ".tooltip");
-        table.add(theme.label(translate(parent.getTranslationPrefix() + entry.getName())));
+        setting.tooltip = translate(naming.tooltip());
+        table.add(theme.label(translate(naming.name())));
         var x = table.add(setting).expandCellX();
         if (!(setting instanceof WCheckbox)) x.expandX();
         table.add(theme.button(GuiRenderer.RESET)).widget().action = () -> {
@@ -171,5 +180,9 @@ public class ShimUi {
 
     private static String translate(String key) {
         return I18n.hasTranslation(key) ? I18n.translate(key) : key;
+    }
+
+    private static String translate(@Nullable Text text) {
+        return text == null ? null : text.getString();
     }
 }

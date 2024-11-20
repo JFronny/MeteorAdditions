@@ -14,8 +14,8 @@ public class CustomWrapperLookup implements RegistryWrapper.WrapperLookup {
     }
 
     @Override
-    public <T> Optional<RegistryWrapper.Impl<T>> getOptionalWrapper(RegistryKey<? extends Registry<? extends T>> registryRef) {
-        return getRegistryManager().flatMap(s -> s.getOptionalWrapper(registryRef));
+    public <T> Optional<? extends RegistryWrapper.Impl<T>> getOptional(RegistryKey<? extends Registry<? extends T>> registryRef) {
+        return getRegistryManager().flatMap(s -> s.getOptional(registryRef));
     }
 
     private Optional<DynamicRegistryManager> getRegistryManager() {

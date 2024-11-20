@@ -4,6 +4,7 @@ import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import io.gitlab.jfronny.commons.data.MutCollection;
 import io.gitlab.jfronny.libjf.config.api.v2.ConfigHolder;
+import io.gitlab.jfronny.libjf.config.api.v2.Naming;
 import io.gitlab.jfronny.meteoradditions.util.ShimUi;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.GuiThemes;
@@ -24,7 +25,7 @@ public class ModMenuCompat implements ModMenuApi {
         });
         if (!FabricLoader.getInstance().isModLoaded("libjf-config-ui-tiny-v1")) {
             ConfigHolder.getInstance().getRegistered().forEach((key, config) -> {
-                m.put(key, s -> new ShimUi.ShimUiScreen(GuiThemes.get(), config));
+                m.put(key, s -> new ShimUi.ShimUiScreen(GuiThemes.get(), config, Naming.get(config.getId())));
             });
         }
         return m;
