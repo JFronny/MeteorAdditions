@@ -2,9 +2,7 @@ package io.gitlab.jfronny.meteoradditions.util;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.serialization.DataResult;
-import io.gitlab.jfronny.commons.throwable.Coerce;
-import io.gitlab.jfronny.commons.throwable.ThrowingFunction;
+import com.mojang.serialization.*;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -14,7 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.nbt.visitor.StringNbtWriter;
-import net.minecraft.registry.Registries;
+import net.minecraft.registry.*;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
@@ -22,32 +21,37 @@ import net.minecraft.util.InvalidIdentifierException;
 import java.util.Optional;
 
 public class CustomItemStringReader {
-    private static final CustomWrapperLookup LOOKUP = new CustomWrapperLookup();
-    private static final ThrowingFunction<NbtElement, ComponentChanges, ItemSyntaxException> parser = Coerce
-            .<NbtElement, DataResult<ComponentChanges>, ItemSyntaxException>function(LOOKUP.getOps(NbtOps.INSTANCE).withParser(ComponentChanges.CODEC)::apply)
-            .andThen(Coerce.function(result -> result.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e))));
-    private static final ThrowingFunction<ComponentChanges, NbtElement, ItemSyntaxException> encoder = Coerce
-            .<ComponentChanges, DataResult<NbtElement>, ItemSyntaxException>function(LOOKUP.getOps(NbtOps.INSTANCE).withEncoder(ComponentChanges.CODEC)::apply)
-            .andThen(Coerce.function(result -> result.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e))));
-
     public static String write(ItemStack stack) throws ItemSyntaxException {
+        RegistryWrapper.WrapperLookup registries = CommandManager.createRegistryAccess(BuiltinRegistries.createWrapperLookup());
+        DynamicOps<NbtElement> nbtOps = registries.getOps(NbtOps.INSTANCE);
+
         StringBuilder sb = new StringBuilder(stack.getItem().toString());
-        sb.append(new StringNbtWriter().apply(encoder.apply(stack.getComponentChanges())));
+        DataResult<NbtElement> changes = ComponentChanges.CODEC.encode(stack.getComponentChanges(), nbtOps, nbtOps.empty());
+        sb.append(new StringNbtWriter().apply(changes.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e))));
         if (stack.getCount() != 1) sb.append('$').append(stack.getCount());
         return sb.toString();
     }
 
     public static ItemStack read(String desc) throws ItemSyntaxException {
+        RegistryWrapper.WrapperLookup registries = new CustomWrapperLookup();
+        DynamicOps<NbtElement> nbtOps = registries.getOps(NbtOps.INSTANCE); // This ensures that caches are not used, which would cause a crash since reference equality is assumed in some vanilla code
+
         StringReader reader = new StringReader(desc);
         Identifier identifier = readIdentifier(reader);
-        Item item = Registries.ITEM.getOptionalValue(identifier).orElseThrow(() -> new ItemSyntaxException("Invalid item ID: " + identifier));
+        Item item = registries.getOrThrow(RegistryKeys.ITEM)
+                .getOptional(RegistryKey.of(RegistryKeys.ITEM, identifier))
+                .orElseThrow(() -> new ItemSyntaxException("Invalid item ID: " + identifier))
+                .value();
         ItemStack stack = new ItemStack(item, 1);
         while (reader.canRead()) {
             switch (reader.read()) {
                 case '{' -> {
                     try {
                         reader.setCursor(reader.getCursor() - 1);
-                        stack.applyChanges(parser.apply(new StringNbtReader(reader).parseCompound()));
+                        DataResult<Dynamic<?>> datum = Codec.PASSTHROUGH.parse(nbtOps, new StringNbtReader(reader).parseCompound());
+                        datum = datum.map(dt -> RegistryOps.withRegistry(dt, registries));
+                        DataResult<ComponentChanges> changes = datum.flatMap(ComponentChanges.CODEC::parse);
+                        stack.applyChanges(changes.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e)));
                     } catch (CommandSyntaxException e) {
                         throw new ItemSyntaxException("Could not parse NBT", e);
                     }

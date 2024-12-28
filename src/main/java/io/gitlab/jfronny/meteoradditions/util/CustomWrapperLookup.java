@@ -1,8 +1,8 @@
 package io.gitlab.jfronny.meteoradditions.util;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
 import net.minecraft.registry.*;
+import net.minecraft.world.World;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -19,7 +19,7 @@ public class CustomWrapperLookup implements RegistryWrapper.WrapperLookup {
     }
 
     private Optional<DynamicRegistryManager> getRegistryManager() {
-        return Optional.ofNullable(MinecraftClient.getInstance().player)
-                .map(Entity::getRegistryManager);
+        return Optional.ofNullable(MinecraftClient.getInstance().world)
+                .map(World::getRegistryManager);
     }
 }
