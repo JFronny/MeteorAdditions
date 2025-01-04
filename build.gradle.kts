@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.8-SNAPSHOT"
+    id("fabric-loom") version "1.9-SNAPSHOT"
 }
 
 version = "1.2.0"
@@ -20,10 +20,10 @@ dependencies {
     mappings("net.fabricmc:yarn:$game+build.2:v2")
     modImplementation("net.fabricmc:fabric-loader:0.16.9")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.109.0+$game")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.114.0+$game")
 
     modImplementation("meteordevelopment:meteor-client:0.5.9-SNAPSHOT")
-    modImplementation("com.terraformersmc:modmenu:12.0.0-beta.1")
+    modImplementation("com.terraformersmc:modmenu:12.0.0")
 
     include(modImplementation("io.gitlab.jfronny:google-chat:0.9.1")!!)
     val libjfVersion = "3.18.2"
