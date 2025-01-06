@@ -13,20 +13,20 @@ repositories {
 }
 
 // https://fabricmc.net/develop
-val game = "1.21.3"
+val game = "1.21.4"
 
 dependencies {
     minecraft("com.mojang:minecraft:$game")
-    mappings("net.fabricmc:yarn:$game+build.2:v2")
+    mappings("net.fabricmc:yarn:$game+build.7:v2")
     modImplementation("net.fabricmc:fabric-loader:0.16.9")
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.114.0+$game")
 
-    modImplementation("meteordevelopment:meteor-client:0.5.9-SNAPSHOT")
-    modImplementation("com.terraformersmc:modmenu:12.0.0")
+    modImplementation("meteordevelopment:meteor-client:0.6.0-SNAPSHOT")
+    modImplementation("com.terraformersmc:modmenu:13.0.0")
 
-    include(modImplementation("io.gitlab.jfronny:google-chat:0.9.1")!!)
-    val libjfVersion = "3.18.2"
+    include(modImplementation("io.gitlab.jfronny:google-chat:0.9.2")!!)
+    val libjfVersion = "3.18.3"
     include(modImplementation("io.gitlab.jfronny.libjf:libjf-config-core-v2:$libjfVersion")!!)
     include(modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v1:$libjfVersion")!!)
     include("io.gitlab.jfronny.libjf:libjf-base:$libjfVersion")
