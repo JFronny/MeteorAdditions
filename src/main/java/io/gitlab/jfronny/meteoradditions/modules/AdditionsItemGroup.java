@@ -27,7 +27,9 @@ public class AdditionsItemGroup {
                 s = s.trim();
                 if (s.isEmpty()) continue;
                 try {
-                    entries.add(CustomItemStringReader.read(s));
+                    ItemStack stack = CustomItemStringReader.read(s);
+                    stack.setCount(1); // just to be sure
+                    entries.add(stack);
                 } catch (CustomItemStringReader.ItemSyntaxException e) {
                     MeteorAdditions.LOG.error("Could not parse item for additions group (\"{}\")", s, e);
                 }
