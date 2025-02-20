@@ -1,5 +1,6 @@
 package io.gitlab.jfronny.meteoradditions.util;
 
+import io.gitlab.jfronny.commons.ref.R;
 import io.gitlab.jfronny.libjf.config.api.v2.*;
 import io.gitlab.jfronny.libjf.config.api.v2.type.Type;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
@@ -11,6 +12,7 @@ import meteordevelopment.meteorclient.gui.widgets.containers.*;
 import meteordevelopment.meteorclient.gui.widgets.input.*;
 import meteordevelopment.meteorclient.gui.widgets.pressable.WCheckbox;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -39,28 +41,43 @@ public class ShimUi {
     public static class ShimUiScreen extends WindowScreen {
         private final ConfigInstance config;
         private final Naming naming;
+        private Runnable onSave = R::nop;
 
-        public ShimUiScreen(GuiTheme theme, ConfigInstance config, Naming naming) {
+        public ShimUiScreen(Screen parent, GuiTheme theme, ConfigInstance config, Naming naming) {
             super(theme, translate(naming.name()));
+            this.parent = parent;
             this.config = config;
             this.naming = naming;
         }
 
+        public void onSave(Runnable runnable) {
+            Runnable old = onSave;
+            onSave = () -> {
+                old.run();
+                runnable.run();
+            };
+        }
+
         @Override
         public void initWidgets() {
-            generate(config, naming, theme, window);
+            generate(this, config, naming, theme, window);
+        }
+
+        @Override
+        protected void onClosed() {
+            onSave.run();
         }
     }
 
-    public static void generate(ConfigInstance config, Naming naming, GuiTheme theme, WVerticalList target) {
+    public static void generate(Screen self, ConfigInstance config, Naming naming, GuiTheme theme, WVerticalList target) {
         try {
-            new ShimUi(theme, target, config, naming).generate();
+            new ShimUi(theme, target, config, naming).generate(self);
         } catch (IllegalAccessException e) {
             MeteorAdditions.LOG.error("Could not shim UI", e);
         }
     }
 
-    private void generate() throws IllegalAccessException {
+    private void generate(Screen self) throws IllegalAccessException {
         if (!parent.getPresets().isEmpty()) {
             WSection presets = target.add(theme.section(translate("meteor-additions.presets"), false)).expandX().widget();
             for (Map.Entry<String, Runnable> entry : parent.getPresets().entrySet()) {
@@ -69,7 +86,7 @@ public class ShimUi {
                     parent.getRoot().write();
                     target.clear();
                     try {
-                        generate();
+                        generate(self);
                     } catch (IllegalAccessException e) {
                         MeteorAdditions.LOG.error("Could not generate shim UI", e);
                         target.add(theme.label("Could not generate"));
@@ -80,7 +97,7 @@ public class ShimUi {
         for (var entry : parent.getCategories().entrySet()) {
             var categoryNaming = naming.category(entry.getKey());
             WSection section = target.add(theme.section(translate(categoryNaming.name()), false)).expandX().widget();
-            new ShimUi(theme, section, entry.getValue(), categoryNaming).generate();
+            new ShimUi(theme, section, entry.getValue(), categoryNaming).generate(self);
         }
         target.add(table).expandX();
         for (EntryInfo<?> entry : parent.getEntries()) entry(entry, naming.entry(entry.getName()));
@@ -90,7 +107,7 @@ public class ShimUi {
                 var referencedNaming = naming.referenced(config);
                 String name = translate(referencedNaming.name());
                 referenced.add(theme.button(name)).widget().action = () -> {
-                    ShimUiScreen screen = new ShimUiScreen(theme, config, referencedNaming);
+                    ShimUiScreen screen = new ShimUiScreen(self, theme, config, referencedNaming);
                     MinecraftClient mc = MinecraftClient.getInstance();
                     screen.parent = mc.currentScreen;
                     mc.setScreen(screen);
@@ -126,7 +143,7 @@ public class ShimUi {
                     WDoubleEdit::set);
         } else if (type.isString()) {
             widget = add((EntryInfo<String>) entry, naming,
-                    theme.textBox((String) entry.getValue()),
+                    theme.textBox(Objects.requireNonNullElse((String) entry.getValue(), "")),
                     (s, r) -> s.action = r,
                     WTextBox::get,
                     WTextBox::set);

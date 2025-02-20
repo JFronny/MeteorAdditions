@@ -1,33 +1,40 @@
 package io.gitlab.jfronny.meteoradditions;
 
+import com.terraformersmc.modmenu.ModMenu;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import io.gitlab.jfronny.commons.data.MutCollection;
-import io.gitlab.jfronny.libjf.config.api.v2.ConfigHolder;
-import io.gitlab.jfronny.libjf.config.api.v2.Naming;
-import io.gitlab.jfronny.meteoradditions.util.ShimUi;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.GuiThemes;
-import meteordevelopment.meteorclient.gui.tabs.TabScreen;
-import meteordevelopment.meteorclient.gui.tabs.Tabs;
-import net.fabricmc.loader.api.FabricLoader;
+import meteordevelopment.meteorclient.gui.screens.ModulesScreen;
+import net.minecraft.client.gui.screen.Screen;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
 public class ModMenuCompat implements ModMenuApi {
     @Override
-    public Map<String, ConfigScreenFactory<?>> getProvidedConfigScreenFactories() {
-        Map<String, ConfigScreenFactory<?>> m = MutCollection.mapOf("meteor-client", s -> {
-            GuiTheme theme = GuiThemes.get();
-            TabScreen screen = Tabs.get().getFirst().createScreen(theme);
-            screen.addDirect(theme.topBar()).top().centerX();
-            return screen;
-        });
-        if (!FabricLoader.getInstance().isModLoaded("libjf-config-ui-tiny-v1")) {
-            ConfigHolder.getInstance().getRegistered().forEach((key, config) -> {
-                m.put(key, s -> new ShimUi.ShimUiScreen(GuiThemes.get(), config, Naming.get(config.getId())));
-            });
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        return null;
+    }
+
+    public static Screen getMeteorScreen(Screen parent) {
+        GuiTheme theme = GuiThemes.get();
+        ModulesScreen screen = new ModulesScreen(theme);
+        screen.addDirect(theme.topBar()).top().centerX();
+        screen.parent = parent;
+        return screen;
+    }
+
+    static {
+        // MeteorClient provides its own default screen, but that one isn't implemented right
+        // (doesn't have the top bar and doesn't respect the parent screen)
+        try {
+            Field field = ModMenu.class.getDeclaredField("configScreenFactories");
+            field.setAccessible(true);
+            Map<String, ConfigScreenFactory<?>> factories = (Map<String, ConfigScreenFactory<?>>) field.get(null);
+            factories.put("meteor-client", ModMenuCompat::getMeteorScreen);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            MeteorAdditions.LOG.error("Failed to inject MeteorClient config screen", e);
         }
-        return m;
     }
 }

@@ -17,12 +17,12 @@ val game = "1.21.4"
 
 dependencies {
     minecraft("com.mojang:minecraft:$game")
-    mappings("net.fabricmc:yarn:$game+build.7:v2")
-    modImplementation("net.fabricmc:fabric-loader:0.16.9")
+    mappings("net.fabricmc:yarn:$game+build.8:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.16.10")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.114.0+$game")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.118.0+$game")
 
-    modImplementation("meteordevelopment:meteor-client:0.6.0-SNAPSHOT")
+    modImplementation("meteordevelopment:meteor-client:$game-SNAPSHOT")
     modImplementation("com.terraformersmc:modmenu:13.0.0")
 
     include(modImplementation("io.gitlab.jfronny:google-chat:0.9.2")!!)

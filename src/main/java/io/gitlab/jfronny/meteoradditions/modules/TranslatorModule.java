@@ -5,6 +5,7 @@ import io.gitlab.jfronny.googlechat.JFC_GoogleChatConfig;
 import io.gitlab.jfronny.libjf.config.api.v2.ConfigInstance;
 import io.gitlab.jfronny.libjf.config.api.v2.Naming;
 import io.gitlab.jfronny.meteoradditions.util.ShimUi;
+import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.widgets.WWidget;
 import meteordevelopment.meteorclient.gui.widgets.containers.WVerticalList;
@@ -28,7 +29,7 @@ public class TranslatorModule extends Module {
     @Override
     public WWidget getWidget(GuiTheme theme) {
         WVerticalList table = theme.verticalList();
-        ShimUi.generate(ConfigInstance.get("google-chat"), Naming.get("google-chat"), theme, table);
+        ShimUi.generate(MeteorClient.mc.currentScreen, ConfigInstance.get("google-chat"), Naming.get("google-chat"), theme, table);
         return table;
     }
 

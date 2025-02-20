@@ -17,7 +17,8 @@
   "entrypoints": {
     "meteor": ["io.gitlab.jfronny.meteoradditions.MeteorAdditions"],
     "main": ["io.gitlab.jfronny.meteoradditions.MeteorAdditions::gameInit"],
-    "modmenu": ["io.gitlab.jfronny.meteoradditions.ModMenuCompat"]
+    "modmenu": ["io.gitlab.jfronny.meteoradditions.ModMenuCompat"],
+    "libjf:config_screen": ["io.gitlab.jfronny.meteoradditions.ShimUIConfigScreenFactory"]
   },
   "mixins": [
     "MeteorAdditions.mixins.json"
