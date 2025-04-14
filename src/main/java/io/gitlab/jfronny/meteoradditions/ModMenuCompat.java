@@ -17,7 +17,7 @@ public class ModMenuCompat implements ModMenuApi {
         return null;
     }
 
-    public static Screen getMeteorScreen(Screen parent) {
+    public static Screen getMeteorScreen(Screen parent) { // see also ModMenuIntegration in Meteor AME
         GuiTheme theme = GuiThemes.get();
         ModulesScreen screen = new ModulesScreen(theme);
         screen.addDirect(theme.topBar()).top().centerX();

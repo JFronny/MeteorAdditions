@@ -27,7 +27,9 @@ public class CustomItemStringReader {
 
         StringBuilder sb = new StringBuilder(stack.getItem().toString());
         DataResult<NbtElement> changes = ComponentChanges.CODEC.encode(stack.getComponentChanges(), nbtOps, nbtOps.empty());
-        sb.append(new StringNbtWriter().apply(changes.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e))));
+        StringNbtWriter stringNbtWriter = new StringNbtWriter();
+        changes.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e)).accept(stringNbtWriter);
+        sb.append(stringNbtWriter.getString());
         if (stack.getCount() != 1) sb.append('$').append(stack.getCount());
         return sb.toString();
     }
@@ -48,7 +50,7 @@ public class CustomItemStringReader {
                 case '{' -> {
                     try {
                         reader.setCursor(reader.getCursor() - 1);
-                        DataResult<Dynamic<?>> datum = Codec.PASSTHROUGH.parse(nbtOps, new StringNbtReader(reader).parseCompound());
+                        DataResult<Dynamic<?>> datum = Codec.PASSTHROUGH.parse(nbtOps, StringNbtReader.readCompoundAsArgument(reader));
                         datum = datum.map(dt -> RegistryOps.withRegistry(dt, registries));
                         DataResult<ComponentChanges> changes = datum.flatMap(ComponentChanges.CODEC::parse);
                         stack.applyChanges(changes.getOrThrow(e -> new ItemSyntaxException("Invalid item NBT: " + e)));

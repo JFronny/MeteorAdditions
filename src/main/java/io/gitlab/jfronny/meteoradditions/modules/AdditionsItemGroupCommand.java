@@ -19,7 +19,7 @@ public class AdditionsItemGroupCommand extends Command {
     public void build(LiteralArgumentBuilder<CommandSource> builder) {
         builder.executes(context -> {
             try {
-                ItemStack stack = MeteorClient.mc.player.getInventory().getMainHandStack();
+                ItemStack stack = MeteorClient.mc.player.getInventory().getSelectedStack();
                 if (stack.getItem().equals(Items.AIR)) {
                     error("You must hold an item to add it");
                     return SINGLE_SUCCESS;
