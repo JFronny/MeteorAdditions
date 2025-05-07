@@ -13,7 +13,7 @@ repositories {
 }
 
 // https://fabricmc.net/develop
-val game = "1.21.5"
+val game = "1.21.5" // Note: remember to update ServerFinderScreen with the new game version
 
 dependencies {
     minecraft("com.mojang:minecraft:$game")

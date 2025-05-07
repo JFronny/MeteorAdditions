@@ -126,7 +126,7 @@ public class ServerManagerScreen extends WindowScreen {
             MeteorAdditions.LOG.error("Could not load IPs", e);
             toast("meteor-additions.error", "meteor-additions.loaded-ip-failed");
         });
-        l.add(theme.button("Mass scan")).expandX().widget().action = () -> {
+        l.add(theme.button("Mass scan ↗")).expandX().widget().action = () -> {
             Util.getOperatingSystem().open("https://github.com/JFronny/MeteorAdditions/tree/master/masscan");
         };
     }
