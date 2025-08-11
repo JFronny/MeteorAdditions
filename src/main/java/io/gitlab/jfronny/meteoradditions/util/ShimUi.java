@@ -85,6 +85,7 @@ public class ShimUi {
                     entry.getValue().run();
                     parent.getRoot().write();
                     target.clear();
+                    table.clear();
                     try {
                         generate(self);
                     } catch (IllegalAccessException e) {
@@ -116,7 +117,7 @@ public class ShimUi {
         }
     }
 
-    private static final Text enabledText = Text.translatableWithFallback("google-chat.jfconfig.enabled", "enabled");
+    private static final Text enabledText = Text.translatableWithFallback("google-chat.jfconfig.general.enabled", "enabled");
     private void entry(EntryInfo<?> entry, Naming.Entry naming) throws IllegalAccessException {
         if (enabledText.equals(naming.name())) return;
         Type type = entry.getValueType();
