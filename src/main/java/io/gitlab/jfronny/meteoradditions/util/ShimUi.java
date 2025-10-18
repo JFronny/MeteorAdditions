@@ -121,44 +121,37 @@ public class ShimUi {
     private void entry(EntryInfo<?> entry, Naming.Entry naming) throws IllegalAccessException {
         if (enabledText.equals(naming.name())) return;
         Type type = entry.getValueType();
-        WWidget widget = null;
-        if (type.isInt()) {
-            widget = add((EntryInfo<Integer>) entry, naming,
+        switch (type) {
+            case Type.TInt _0 -> add((EntryInfo<Integer>) entry, naming,
                     theme.intEdit((int) entry.getValue(), (int) entry.getMinValue(), (int) entry.getMaxValue(), false),
                     (s, r) -> s.action = r,
                     WIntEdit::get,
                     WIntEdit::set);
-        } else if (type.isLong()) {
-            // Unsupported
-        } else if (type.isFloat()) {
-            widget = add((EntryInfo<Float>) entry, naming,
+            case Type.TLong _0 -> table.add(theme.label(entry.getName() + " (unsupported: long)"));
+            case Type.TFloat _0 -> add((EntryInfo<Float>) entry, naming,
                     theme.doubleEdit((float) entry.getValue(), entry.getMinValue(), entry.getMaxValue()),
                     (s, r) -> s.action = r,
                     s -> (float) s.get(),
                     (s, v) -> s.set(v));
-        } else if (type.isDouble()) {
-            widget = add((EntryInfo<Double>) entry, naming,
+            case Type.TDouble _0 -> add((EntryInfo<Double>) entry, naming,
                     theme.doubleEdit((double) entry.getValue(), entry.getMinValue(), entry.getMaxValue()),
                     (s, r) -> s.action = r,
                     WDoubleEdit::get,
                     WDoubleEdit::set);
-        } else if (type.isString()) {
-            widget = add((EntryInfo<String>) entry, naming,
+            case Type.TString _0 -> add((EntryInfo<String>) entry, naming,
                     theme.textBox(Objects.requireNonNullElse((String) entry.getValue(), "")),
                     (s, r) -> s.action = r,
                     WTextBox::get,
                     WTextBox::set);
-        } else if (type.isBool()) {
-            widget = add((EntryInfo<Boolean>) entry, naming,
+            case Type.TBool _0 -> add((EntryInfo<Boolean>) entry, naming,
                     theme.checkbox((boolean) entry.getValue()),
                     (s, r) -> s.action = r,
                     s -> s.checked,
                     (s, v) -> s.checked = v);
-        } else if (type.isEnum()) {
-            widget = tEnum(entry, naming, type.asEnum());
+            //noinspection rawtypes
+            case Type.TEnum tEnum -> tEnum(entry, naming, tEnum);
+            case Type.TUnknown _0 -> table.add(theme.label(entry.getName() + " (unsupported: unknown)"));
         }
-
-        if (widget == null) table.add(theme.label(entry.getName() + " (unsupported)"));
         table.row();
     }
 
