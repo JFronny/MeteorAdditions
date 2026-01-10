@@ -35,8 +35,8 @@ jobs:
     - uses: softprops/action-gh-release@v2
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
-        tag_name: "latest-1.21.10"
+        tag_name: "latest-1.21.11"
         prerelease: false
-        name: "1.21.10 Build"
+        name: "1.21.11 Build"
         files: |
           ./build/libs/*.jar

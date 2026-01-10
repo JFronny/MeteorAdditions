@@ -3,12 +3,14 @@ package io.gitlab.jfronny.meteoradditions.util;
 import io.gitlab.jfronny.meteoradditions.MeteorAdditions;
 import net.minecraft.client.network.MultiplayerServerListPinger;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.network.NetworkingBackend;
 
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class LegacyServerPinger {
     private static final AtomicInteger threadNumber = new AtomicInteger(0);
+    private final NetworkingBackend backend = NetworkingBackend.remote(false);
     private ServerInfo server;
     private boolean done = false;
     private boolean failed = false;
@@ -30,7 +32,7 @@ public class LegacyServerPinger {
         MeteorAdditions.LOG.info("Pinging {}:{}...", ip, port);
 
         try {
-            pinger.add(server, () -> {}, () -> {});
+            pinger.add(server, () -> {}, () -> {}, backend);
             MeteorAdditions.LOG.info("Ping successful: {}:{}", ip, port);
 
         } catch(UnknownHostException e) {

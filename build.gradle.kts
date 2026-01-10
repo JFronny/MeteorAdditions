@@ -1,9 +1,11 @@
 plugins {
-    id("fabric-loom") version "1.11-SNAPSHOT"
+    alias(libs.plugins.fabric.loom)
 }
 
-version = "1.2.0"
-group = "io.gitlab.jfronny"
+base {
+    version = libs.versions.mod.version.get()
+    group = "io.gitlab.jfronny"
+}
 
 repositories {
     maven("https://maven.meteordev.org/releases")
@@ -12,24 +14,26 @@ repositories {
     maven("https://maven.frohnmeyer-wds.de/artifacts")
 }
 
-// https://fabricmc.net/develop
-val game = "1.21.10" // Note: remember to update ServerFinderScreen with the new game version
+val modInclude: Configuration by configurations.creating
+configurations {
+    modImplementation.configure { extendsFrom(modInclude) }
+    include.configure { extendsFrom(modInclude) }
+}
 
 dependencies {
-    minecraft("com.mojang:minecraft:$game")
-    mappings("net.fabricmc:yarn:$game+build.2:v2")
-    modImplementation("net.fabricmc:fabric-loader:0.17.3")
+    minecraft(libs.minecraft)
+    mappings(variantOf(libs.yarn) { classifier("v2") })
+    modImplementation(libs.fabric.loader)
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.136.0+$game")
+    modImplementation(libs.fabric.api)
 
-    modImplementation("meteordevelopment:meteor-client:$game-SNAPSHOT")
-    modImplementation("com.terraformersmc:modmenu:16.0.0-rc.1")
+    modImplementation(libs.meteor.client)
+    modImplementation(libs.modmenu)
 
-    include(modImplementation("io.gitlab.jfronny:google-chat:0.10.4")!!)
-    val libjfVersion = "3.19.4"
-    include(modImplementation("io.gitlab.jfronny.libjf:libjf-config-core-v2:$libjfVersion")!!)
-    include(modImplementation("io.gitlab.jfronny.libjf:libjf-translate-v1:$libjfVersion")!!)
-    include("io.gitlab.jfronny.libjf:libjf-base:$libjfVersion")
+    modInclude(libs.google.chat)
+    modInclude(libs.libjf.config.core.v2)
+    modInclude(libs.libjf.translate.v1)
+    include(libs.libjf.base)
 }
 
 tasks {
@@ -37,7 +41,7 @@ tasks {
         filesMatching("fabric.mod.json") {
             expand(mapOf(
                 "version" to version,
-                "mc_version" to game,
+                "mc_version" to libs.versions.minecraft.get(),
                 "gh_hash" to (System.getenv("GITHUB_SHA") ?: "")
             ))
         }
