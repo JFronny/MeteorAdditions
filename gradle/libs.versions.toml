@@ -2,32 +2,30 @@
 mod-version = "1.2.0"
 
 # Fabric (https://fabricmc.net/develop)
-loom = "1.14-SNAPSHOT"
-minecraft = "1.21.11" # Note: remember to update ServerFinderScreen with the new game version
-yarn-mappings = "1.21.11+build.3"
-fabric-loader = "0.18.2"
-fabric-api = "0.141.1+1.21.11"
+loom = "1.16-SNAPSHOT"
+minecraft = "26.1.2" # Note: remember to update ServerFinderScreen with the new game version
+fabric-loader = "0.19.2"
+fabric-api = "0.146.1+26.1.2"
 
-meteor = "1.21.11-SNAPSHOT" # https://github.com/MeteorDevelopment/meteor-client/
-modmenu = "17.0.0-beta.2" # https://modrinth.com/mod/modmenu/versions
-libjf = "3.19.8" # https://modrinth.com/mod/libjf/versions
-google-chat = "0.10.6" # https://modrinth.com/mod/google-chat/versions
+meteor = "26.1.2-SNAPSHOT" # https://github.com/MeteorDevelopment/meteor-client/
+modmenu = "18.0.0-alpha.8" # https://modrinth.com/mod/modmenu/versions
+libjf = "26.1.2" # https://modrinth.com/mod/libjf/versions
+google-chat = "26.1.0" # https://modrinth.com/mod/google-chat/versions
 
 # Mods
 
 [libraries]
 # Fabric base
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
-yarn = { module = "net.fabricmc:yarn", version.ref = "yarn-mappings" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
 meteor-client = { module = "meteordevelopment:meteor-client", version.ref = "meteor" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
-libjf-base = { module = "io.gitlab.jfronny.libjf:libjf-base", version.ref = "libjf" }
-libjf-config-core-v2 = { module = "io.gitlab.jfronny.libjf:libjf-config-core-v2", version.ref = "libjf" }
-libjf-translate-v1 = { module = "io.gitlab.jfronny.libjf:libjf-translate-v1", version.ref = "libjf" }
-google-chat = { module = "io.gitlab.jfronny:google-chat", version.ref = "google-chat" }
+libjf-base = { module = "dev.jfronny.libjf:libjf-base", version.ref = "libjf" }
+libjf-config-core-v2 = { module = "dev.jfronny.libjf:libjf-config-core-v2", version.ref = "libjf" }
+libjf-translate-v1 = { module = "dev.jfronny.libjf:libjf-translate-v1", version.ref = "libjf" }
+google-chat = { module = "dev.jfronny.mods:google-chat", version.ref = "google-chat" }
 
 [plugins]
-fabric-loom = { id = "fabric-loom", version.ref = "loom" }
+fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "loom" }

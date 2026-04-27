@@ -15,10 +15,18 @@
   "icon": "assets/meteor-additions/icon.png",
   "environment": "client",
   "entrypoints": {
-    "meteor": ["io.gitlab.jfronny.meteoradditions.MeteorAdditions"],
-    "main": ["io.gitlab.jfronny.meteoradditions.MeteorAdditions::gameInit"],
-    "modmenu": ["io.gitlab.jfronny.meteoradditions.ModMenuCompat"],
-    "libjf:config_screen": ["io.gitlab.jfronny.meteoradditions.ShimUIConfigScreenFactory"]
+    "meteor": [
+        "dev.jfronny.meteoradditions.MeteorAdditions"
+    ],
+    "main": [
+        "dev.jfronny.meteoradditions.MeteorAdditions::gameInit"
+    ],
+    "modmenu": [
+        "dev.jfronny.meteoradditions.ModMenuCompat"
+    ],
+    "libjf:config_screen": [
+        "dev.jfronny.meteoradditions.ShimUIConfigScreenFactory"
+    ]
   },
   "mixins": [
     "MeteorAdditions.mixins.json"

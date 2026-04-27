@@ -16,19 +16,18 @@ repositories {
 
 val modInclude: Configuration by configurations.creating
 configurations {
-    modImplementation.configure { extendsFrom(modInclude) }
+    implementation.configure { extendsFrom(modInclude) }
     include.configure { extendsFrom(modInclude) }
 }
 
 dependencies {
     minecraft(libs.minecraft)
-    mappings(variantOf(libs.yarn) { classifier("v2") })
-    modImplementation(libs.fabric.loader)
+    implementation(libs.fabric.loader)
 
-    modImplementation(libs.fabric.api)
+    implementation(libs.fabric.api)
 
-    modImplementation(libs.meteor.client)
-    modImplementation(libs.modmenu)
+    implementation(libs.meteor.client)
+    implementation(libs.modmenu)
 
     modInclude(libs.google.chat)
     modInclude(libs.libjf.config.core.v2)
@@ -54,12 +53,12 @@ tasks {
     }
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
     }
 
     withType<JavaCompile> {
         options.encoding = "UTF-8"
-        options.release = 21
+        options.release = 25
     }
 }

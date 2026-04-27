@@ -3,6 +3,7 @@ pluginManagement {
         maven("https://maven.fabricmc.net/") {
             name = "Fabric"
         }
+        mavenCentral()
         gradlePluginPortal()
     }
 }
