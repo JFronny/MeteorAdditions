@@ -19,7 +19,8 @@ import net.minecraft.client.multiplayer.ServerData;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Stack;
 
 public class ServerFinderScreen extends WindowScreen implements IServerFinderDoneListener {
     private final JoinMultiplayerScreen multiplayerScreen;

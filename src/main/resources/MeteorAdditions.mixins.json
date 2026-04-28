@@ -1,19 +1,19 @@
 {
     "required": true,
     "minVersion": "0.8",
-    "package": "io.gitlab.jfronny.meteoradditions.mixin",
+    "package": "dev.jfronny.meteoradditions.mixin",
     "compatibilityLevel": "JAVA_17",
     "client": [
-        "dev.jfronny.meteoradditions.mixin.ModuleMixin",
-        "dev.jfronny.meteoradditions.mixin.ModulesMixin",
-        "dev.jfronny.meteoradditions.mixin.ModMenuMixin",
-        "dev.jfronny.meteoradditions.mixin.JoinMultiplayerScreenAccessor",
-        "dev.jfronny.meteoradditions.mixin.JoinMultiplayerScreenMixin"
+        "JoinMultiplayerScreenAccessor",
+        "JoinMultiplayerScreenMixin",
+        "ModMenuMixin",
+        "ModuleMixin",
+        "ModulesMixin"
     ],
     "injectors": {
         "defaultRequire": 1
     },
     "mixins": [
-        "dev.jfronny.meteoradditions.mixin.ServerListAccessor"
+        "ServerListAccessor"
     ]
 }

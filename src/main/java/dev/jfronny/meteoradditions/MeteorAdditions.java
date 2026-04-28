@@ -1,7 +1,6 @@
 package dev.jfronny.meteoradditions;
 
 import dev.jfronny.meteoradditions.modules.*;
-import io.gitlab.jfronny.meteoradditions.modules.*;
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
