@@ -60,7 +60,7 @@ public class MeteorAdditions extends MeteorAddon {
 
     @Override
     public String getPackage() {
-        return "io.gitlab.jfronny.meteoradditions";
+        return "dev.jfronny.meteoradditions";
     }
 
     @Override
