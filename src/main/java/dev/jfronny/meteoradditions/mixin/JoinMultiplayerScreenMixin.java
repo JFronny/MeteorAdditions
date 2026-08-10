@@ -20,7 +20,7 @@ public abstract class JoinMultiplayerScreenMixin extends Screen {
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo info) {
         addRenderableWidget(Button.builder(Component.translatable("meteor-additions.servers.button"), button -> {
-                    minecraft.setScreen(new ServerManagerScreen(GuiThemes.get(), (JoinMultiplayerScreen) (Object) this));
+                    minecraft.gui.setScreen(new ServerManagerScreen(GuiThemes.get(), (JoinMultiplayerScreen) (Object) this));
                 })
                 .pos(this.width - 75 - 3 - 75 - 2 - 75 - 2, 3)
                 .size(75, 20)

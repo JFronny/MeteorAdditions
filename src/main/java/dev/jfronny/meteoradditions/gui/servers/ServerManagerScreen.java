@@ -132,11 +132,11 @@ public class ServerManagerScreen extends WindowScreen {
     }
 
     private void toast(String titleKey, String descriptionKey, Object... params) {
-        SystemToast.add(minecraft.getToastManager(), SystemToast.SystemToastId.WORLD_BACKUP, Component.translatable(titleKey), Component.translatable(descriptionKey, params));
+        SystemToast.add(minecraft.gui.toastManager(), SystemToast.SystemToastId.WORLD_BACKUP, Component.translatable(titleKey), Component.translatable(descriptionKey, params));
     }
 
     private void addButton(WContainer c, String text, IGetter<Screen> action) {
         WButton button = c.add(theme.button(text)).expandX().widget();
-        button.action = () -> minecraft.setScreen(action.get());
+        button.action = () -> minecraft.gui.setScreen(action.get());
     }
 }

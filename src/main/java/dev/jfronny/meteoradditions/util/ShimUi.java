@@ -15,7 +15,7 @@ import meteordevelopment.meteorclient.gui.widgets.input.*;
 import meteordevelopment.meteorclient.gui.widgets.pressable.WCheckbox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,8 +112,8 @@ public class ShimUi {
                 referenced.add(theme.button(name)).widget().action = () -> {
                     ShimUiScreen screen = new ShimUiScreen(self, theme, config, referencedNaming);
                     Minecraft mc = Minecraft.getInstance();
-                    screen.parent = mc.screen;
-                    mc.setScreen(screen);
+                    screen.parent = mc.gui.screen();
+                    mc.gui.setScreen(screen);
                 };
             }
         }
@@ -192,7 +192,7 @@ public class ShimUi {
     }
 
     private static String translate(String key) {
-        return I18n.exists(key) ? I18n.get(key) : key;
+        return Language.getInstance().getOrDefault(key, key);
     }
 
     private static String translate(@Nullable Component text) {

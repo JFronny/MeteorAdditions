@@ -29,7 +29,7 @@ public class TranslatorModule extends Module {
     @Override
     public WWidget getWidget(GuiTheme theme) {
         WVerticalList table = theme.verticalList();
-        ShimUi.generate(MeteorClient.mc.screen, ConfigInstance.get("google-chat"), Naming.get("google-chat"), theme, table);
+        ShimUi.generate(MeteorClient.mc.gui.screen(), ConfigInstance.get("google-chat"), Naming.get("google-chat"), theme, table);
         return table;
     }
 
