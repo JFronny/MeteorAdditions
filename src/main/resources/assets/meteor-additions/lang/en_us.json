@@ -1,15 +1,14 @@
 {
-  "meteor-additions.item-group": "MeteorAdditions",
-  "meteor-additions.error": "Something went wrong",
-  "meteor-additions.saved-ip": "Saved %s new IP",
-  "meteor-additions.saved-ips": "Saved %s new IPs",
-  "meteor-additions.saved-ip-success": "Success!",
-  "meteor-additions.saved-ip-failed": "The IPs could not be saved, look at the log for details",
-  "meteor-additions.loaded-ip": "Loaded %s new IP",
-  "meteor-additions.loaded-ips": "Loaded %s new IPs",
-  "meteor-additions.loaded-ip-success": "Success!",
-  "meteor-additions.loaded-ip-failed": "The IPs could not be loaded, look at the log for details",
-  "meteor-additions.servers.button": "Servers",
-  "meteor-additions.presets": "Presets",
-  "meteor-additions.referenced": "Referenced Configs"
+  "meteor-additions.command.meteoradditions-item-group-add.description": "Add the held item to the MeteorAdditions item group",
+  "meteor-additions.command.meteoradditions-item-group-add.name": "Meteoradditions Item Group Add",
+  "meteor-additions.module.auto-spectre.description": "Allows you to keep playing after you die",
+  "meteor-additions.module.auto-spectre.name": "Auto Spectre",
+  "meteor-additions.module.spawn-items.description": "Spawns a lot of unwanted items",
+  "meteor-additions.module.spawn-items.name": "Spawn Items",
+  "meteor-additions.module.translator.description": "Automatically translates chat messages",
+  "meteor-additions.module.translator.name": "Translator",
+  "meteor-additions.setting.spawn-items.general.speed.description": "The speed of drops. High speeds will cause major lag. Disable item rendering!",
+  "meteor-additions.setting.spawn-items.general.speed.name": "Speed",
+  "meteor-additions.setting.spawn-items.general.stack-size.description": "How many items to place in a stack.",
+  "meteor-additions.setting.spawn-items.general.stack-size.name": "Stack Size"
 }

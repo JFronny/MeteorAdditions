@@ -8,6 +8,7 @@ base {
 }
 
 repositories {
+    mavenLocal()
     maven("https://maven.meteordev.org/releases")
     maven("https://maven.meteordev.org/snapshots")
     maven("https://maven.terraformersmc.com/")
