@@ -1,5 +1,6 @@
 package dev.jfronny.meteoradditions.gui.servers;
 
+import com.mojang.blaze3d.Blaze3D;
 import dev.jfronny.commons.throwable.Try;
 import dev.jfronny.meteoradditions.MeteorAdditions;
 import dev.jfronny.meteoradditions.mixin.JoinMultiplayerScreenAccessor;
@@ -18,13 +19,13 @@ import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Util;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.PointerBuffer;
+import org.lwjgl.sdl.SDLDialog;
+import org.lwjgl.sdl.SDL_DialogFileFilter;
+import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
-import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -33,12 +34,12 @@ import java.util.Set;
 
 public class ServerManagerScreen extends WindowScreen {
     private final JoinMultiplayerScreen multiplayerScreen;
-    private static final PointerBuffer saveFileFilters;
+    private static final SDL_DialogFileFilter.Buffer saveFileFilters;
 
     static {
-        saveFileFilters = BufferUtils.createPointerBuffer(1);
-        saveFileFilters.put(MemoryUtil.memASCII("*.txt"));
-        saveFileFilters.rewind();
+        MemoryStack stack = MemoryStack.stackPush();
+        saveFileFilters = SDL_DialogFileFilter.malloc(1, stack);
+        saveFileFilters.name(stack.UTF8("Text Files")).pattern(stack.UTF8("txt"));
     }
 
     public ServerManagerScreen(GuiTheme theme, JoinMultiplayerScreen multiplayerScreen) {
@@ -54,9 +55,11 @@ public class ServerManagerScreen extends WindowScreen {
         addButton(l, "Find Servers (legacy)", () -> new LegacyServerFinderScreen(theme, multiplayerScreen, this));
         addButton(l, "Clean Up", () -> new CleanUpScreen(theme, multiplayerScreen, this));
         l = add(theme.horizontalList()).expandX().widget();
-        l.add(theme.button("Save IPs")).expandX().widget().action = Try.handle(() -> {
-            String targetPath = TinyFileDialogs.tinyfd_saveFileDialog("Save IPs", null, saveFileFilters, null);
-            if (targetPath == null) return;
+        l.add(theme.button("Save IPs")).expandX().widget().action = () -> SDLDialog.SDL_ShowSaveFileDialog((_, file, _) -> Try.handle(() -> {
+            if (file == 0) return;
+            long filePointer = MemoryUtil.memGetAddress(file);
+            if (filePointer == 0) return;
+            String targetPath = MemoryUtil.memUTF8(filePointer);
             if (!targetPath.endsWith(".txt")) targetPath += ".txt";
             Path filePath = Path.of(targetPath);
 
@@ -101,11 +104,12 @@ public class ServerManagerScreen extends WindowScreen {
         }, e -> {
             MeteorAdditions.LOG.error("Could not save IPs", e);
             toast("meteor-additions.error", "meteor-additions.saved-ip-failed");
-        });
-        l.add(theme.button("Load IPs")).expandX().widget().action = Try.handle(() -> {
-            String targetPath = TinyFileDialogs.tinyfd_openFileDialog("Load IPs", null, saveFileFilters, "", false);
-            if (targetPath == null) return;
-            Path filePath = Path.of(targetPath);
+        }), 0, 0, saveFileFilters, "");
+        l.add(theme.button("Load IPs")).expandX().widget().action = () -> SDLDialog.SDL_ShowOpenFileDialog((_, file, _) -> Try.handle(() -> {
+            if (file == 0) return;
+            long filePointer = MemoryUtil.memGetAddress(file);
+            if (filePointer == 0) return;
+            Path filePath = Path.of(MemoryUtil.memUTF8(filePointer));
             if (!Files.exists(filePath)) return;
 
             List<ServerData> servers = ((ServerListAccessor) multiplayerScreen.getServers()).getServers();
@@ -125,9 +129,9 @@ public class ServerManagerScreen extends WindowScreen {
         }, e -> {
             MeteorAdditions.LOG.error("Could not load IPs", e);
             toast("meteor-additions.error", "meteor-additions.loaded-ip-failed");
-        });
+        }), 0L, 0, saveFileFilters, "", false);
         l.add(theme.button("Mass scan ↗")).expandX().widget().action = () -> {
-            Util.getPlatform().openUri("https://github.com/JFronny/MeteorAdditions/tree/master/masscan");
+            Blaze3D.openUri(URI.create("https://github.com/JFronny/MeteorAdditions/tree/master/masscan"));
         };
     }
 

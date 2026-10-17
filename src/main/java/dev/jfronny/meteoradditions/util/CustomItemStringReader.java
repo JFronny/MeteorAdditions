@@ -26,7 +26,7 @@ import java.util.Optional;
 
 public class CustomItemStringReader {
     public static String write(ItemStack stack) throws ItemSyntaxException {
-        HolderLookup.Provider registries = Commands.createValidationContext(VanillaRegistries.createLookup());
+        HolderLookup.Provider registries = Commands.createValidationContext(VanillaRegistries.createWorldLookup());
         DynamicOps<Tag> nbtOps = registries.createSerializationContext(NbtOps.INSTANCE);
 
         StringBuilder sb = new StringBuilder(stack.getItem().toString());
